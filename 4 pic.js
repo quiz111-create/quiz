@@ -3,7 +3,7 @@ let timeLeft = 30;
 let currentQuestionIndex = null;
 let selectedHouse = null;
 
-const buzzer = document.getElementById("buzzer");
+const buzzerSound = document.getElementById("buzzer");
 const tickSound = document.getElementById("tickSound");
 const hurraySound = document.getElementById("hurraySound");
 
@@ -11,7 +11,7 @@ const hurraySound = document.getElementById("hurraySound");
 // QUESTIONS
 // ===============================
 const questions = [
-  { q: "What is your name?", a: "Your actual name", img: "https://tse4.mm.bing.net/th/id/OIF.glHbjpPHyrqeP1YjaosQfQ?rs=1&pid=ImgDetMain&o=7&rm=3" },
+  { q: "What is your name?", a: "Your actual name", img: "https://via.placeholder.com/200" },
   { q: "Where do you live?", a: "Your location", img: "https://via.placeholder.com/200" },
   { q: "What is 2 + 2?", a: "4", img: "https://via.placeholder.com/200" },
   { q: "What is your favorite color?", a: "Any color", img: "https://via.placeholder.com/200" },
@@ -61,7 +61,6 @@ function showQuestion2() {
     btn.style.display = "inline-block";
   });
 }
-document.getElementById("showQn").addEventListener("click", showQuestion2);
 
 // ===============================
 // CREATE QUESTION BUTTONS
@@ -112,7 +111,7 @@ document.querySelectorAll("#houseSelect button").forEach(btn => {
 });
 
 // ===============================
-// TIMER (TICK + BUZZER BEFORE ALERT)
+// TIMER
 // ===============================
 function startTimer() {
   const timerText = document.getElementById("timerText");
@@ -136,7 +135,7 @@ function startTimer() {
     if (timeLeft <= 0) {
       clearInterval(timerInterval);
       stopAllSounds();
-      buzzer.play();
+      if (buzzerSound) buzzerSound.play();
 
       setTimeout(() => {
         alert("⏰ Time up!");
@@ -160,7 +159,8 @@ function showAnswerButtons() {
 
   btnCorrect.onclick = () => {
     stopAllSounds();
-    hurraySound.play();
+    if (hurraySound) hurraySound.play();
+
     updateScore(selectedHouse, 10);
 
     setTimeout(() => {
@@ -208,7 +208,7 @@ function showCorrectAnswer() {
 }
 
 function stopAllSounds() {
-  [tickSound, buzzer, hurraySound].forEach(s => {
+  [tickSound, buzzerSound, hurraySound].forEach(s => {
     if (s) {
       s.pause();
       s.currentTime = 0;
@@ -216,9 +216,6 @@ function stopAllSounds() {
   });
 }
 
-// ===============================
-// IMAGE POPUP
-// ===============================
 function showImagePopup(src) {
   const overlay = document.createElement("div");
   overlay.style.position = "fixed";
