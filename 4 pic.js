@@ -156,9 +156,9 @@ function showAnswerButtons() {
   btnCorrect.textContent = "Correct";
   btnWrong.textContent = "Wrong";
   btnCorrect.className = btnWrong.className = "quiz-btn";
-  
+
 btnCorrect.onclick = () => {
-  clearInterval(timerInterval);   // stop ticking
+  clearInterval(timerInterval);  
   stopAllSounds();
   if (hurraySound) hurraySound.play();
 
@@ -172,7 +172,7 @@ btnCorrect.onclick = () => {
 };
 
 btnWrong.onclick = () => {
-  clearInterval(timerInterval);   // stop ticking
+  clearInterval(timerInterval); 
   stopAllSounds();
 
   setTimeout(() => {
