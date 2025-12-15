@@ -1,3 +1,4 @@
+
 document.addEventListener("DOMContentLoaded", function () {
 
 let currentCategoryG = null;
@@ -5,6 +6,11 @@ let currentQuestionIndexG = null;
 let selectedHouseG = null;
 let timeLeftG = 30;
 let timerIntervalG = null;
+
+// Audio elements
+const tickSound = new Audio("tick_timer.wav");
+const buzzerSound = new Audio("buzzer.mp3");
+const hurrahSound = new Audio("hurray.mp3");
 
 const QUESTIONS_G = {
   gold: [
@@ -114,33 +120,35 @@ function startTimerG(answer) {
   clearInterval(timerIntervalG);
   timeLeftG = 30;
   elG.timerBox.textContent = `${timeLeftG}s`;
-         if (timeLeftG <= 5) timerBox.style.backgroundColor = "#ff6868";
-        else if (timeLeftG <= 10) timerBox.style.backgroundColor = "#ffd966";
-        else timerBox.style.backgroundColor = "#ffe680";
+
   elG.timerBox.style.height = "50px";
   elG.timerBox.style.width = "150px";
   elG.timerBox.style.borderRadius = "20px";
-
-
-   elG.timerBox.style.fontSize = "28px";   // adjust size as you like
-  elG.timerBox.style.fontWeight = "bold"; // makes it bold
+  elG.timerBox.style.fontSize = "28px";   
+  elG.timerBox.style.fontWeight = "bold"; 
   elG.timerBox.style.textAlign = "center"; 
+
   timerIntervalG = setInterval(() => {
     timeLeftG--;
     elG.timerBox.textContent = `${timeLeftG}s`;
-    
+
+    // Play tick sound each second
+    tickSound.currentTime = 0;
+    tickSound.play();
+
     if (timeLeftG <= 0) {
       clearInterval(timerIntervalG);
+      buzzerSound.play(); // buzzer when time is up
       showAnswerTextG(answer);
       disableAnswerButtonsG();
     }
   }, 1000);
 }
 
-
 function showAnswerButtonsG(answer) {
   const correctBtn = document.createElement("button");
   const wrongBtn = document.createElement("button");
+  
   correctBtn.textContent = "Correct";
   wrongBtn.textContent = "Wrong";
   correctBtn.className = "quiz-action quiz-btn";
@@ -148,6 +156,7 @@ function showAnswerButtonsG(answer) {
 
   correctBtn.onclick = () => {
     updateScoreG(selectedHouseG, scoreFor(currentCategoryG));
+    hurrahSound.play(); // play hurrah sound
     alert(`✅ ${selectedHouseG.toUpperCase()} gains +${scoreFor(currentCategoryG)}!`);
     clearInterval(timerIntervalG);
     showAnswerTextG(answer);
@@ -200,3 +209,4 @@ function updateScoreG(houseId, delta) {
 }
 
 });
+

@@ -1,10 +1,16 @@
-
 let currentCategoryMB = null;
 let currentQuestionIndexMB = null;
 let selectedHouseMB = null;
 let timeLeftMB = 30;
 let timerIntervalMB = null;
+const buzzer = document.getElementById("buzzer");
+const tickSound = document.getElementById("tickSound");
+const hurraySound = document.getElementById("hurraySound");
 
+// ✅ Ensure tick sound loops until stopped
+if (tickSound) {
+  tickSound.loop = true;
+}
 
 const QUESTIONS_MB = {
   history: [
@@ -42,8 +48,7 @@ const QUESTIONS_MB = {
     { q: "Solve: 15 + 25", a: "40" },
     { q: "What is 7 factorial?", a: "5040" }
   ],
-
-currentaffair: [
+  currentaffair: [
     { q: "What is 12 x 12?", a: "144" },
     { q: "Square root of 81?", a: "9" },
     { q: "Value of Pi (approx)?", a: "3.14" },
@@ -51,7 +56,6 @@ currentaffair: [
     { q: "What is 7 factorial?", a: "5040" }
   ]
 };
-
 
 const el = {
   mixedBagButtons: document.getElementById("mixedBagButtons"),
@@ -72,7 +76,6 @@ const el = {
   ]
 };
 
-
 function showMixedBag() {
   document.querySelector(".main1").style.height = "auto";
   clearInterval(timerIntervalMB);
@@ -84,66 +87,31 @@ function showMixedBag() {
   showCategoryHeaders();
 }
 
-
 function History() { toggleCategory("history"); }
 function Science() { toggleCategory("science"); }
 function Sports()  { toggleCategory("sport"); }
 function Maths()   { toggleCategory("maths"); }
-function Currentaffair()   { toggleCategory("currentaffair"); }
-function Movies() {toggleCategory("movies")}
+function Currentaffair() { toggleCategory("currentaffair"); }
+function Movies() { toggleCategory("movies"); }
 
 function toggleCategory(cls) {
   clearInterval(timerIntervalMB);
   resetQuestionAreaMB();
-
- 
-  document.querySelectorAll(".categorySet").forEach(set => {
-    set.style.display = "none";
-  });
-
-  
+  document.querySelectorAll(".categorySet").forEach(set => set.style.display = "none");
   const selectedSet = document.querySelector(`.categorySet.${cls}`);
   if (selectedSet) selectedSet.style.display = "block";
-
   el.categoryHeaders.forEach(h => h.style.display = "none");
   el.generalImg.style.display = "block";
-
-  // ✅ Set current category here
   currentCategoryMB = cls;
 }
 
-function hideAllQuestionButtons() {
-  document.querySelectorAll(".categorySet").forEach(set => {
-    set.style.display = "none";
-  });
-}
-function backHistory() { backToCategories("history"); 
-  document.getElementById("houseSelectMB").style.display="none";
-}
-function backScience() { backToCategories("science");
-  document.getElementById("houseSelectMB").style.display="none";
- }
-function backSports()  { backToCategories("sport");
-  document.getElementById("houseSelectMB").style.display="none";
- }
-function backMaths()   { backToCategories("maths"); 
-  document.getElementById("houseSelectMB").style.display="none";
-}
-function backMaths()   { backToCategories("maths"); 
-  document.getElementById("houseSelectMB").style.display="none";
-}
-function backCurrentaffair()   { backToCategories("currentaffair");
-  document.getElementById("houseSelectMB").style.display="none";
- }
- function backMovies()   { backToCategories("movies");
-  document.getElementById("houseSelectMB").style.display="none";
- }
 function backToCategories(cls) {
   clearInterval(timerIntervalMB);
   resetQuestionAreaMB();
   hideCategoryButtons(cls);
   showCategoryHeaders();
   el.generalImg.style.display = "block";
+  document.getElementById("houseSelectMB").style.display = "none";
 }
 
 function myfunctionMB(event) {
@@ -151,34 +119,27 @@ function myfunctionMB(event) {
   const number = parseInt(btn.textContent.trim(), 10);
   const category = btn.getAttribute("data-category");
   if (!category) return;
-
   currentCategoryMB = category;
   currentQuestionIndexMB = number - 1;
   selectedHouseMB = null;
   timeLeftMB = 30;
-
   btn.style.display = "none";
   clearInterval(timerIntervalMB);
   resetQuestionAreaMB();
   el.houseSelect.style.display = "block";
 }
 
-
-
 document.querySelectorAll("#houseSelectMB button").forEach(houseBtn => {
   houseBtn.addEventListener("click", () => {
     selectedHouseMB = houseBtn.id;
     el.houseSelect.style.display = "none";
-
     const q = QUESTIONS_MB[currentCategoryMB][currentQuestionIndexMB];
     el.questionBox.innerHTML = `<div style="height:70%; width:90%; background:#FFF4E8; border-radius:30px;"><h2>${q.q}</h2></div>`;
     el.questionBox.style.display = "block";
-
     startTimerMB(q.a);
     showAnswerButtonsMB(q.a);
   });
 });
-
 
 function startTimerMB(answer) {
   clearInterval(timerIntervalMB);
@@ -186,6 +147,12 @@ function startTimerMB(answer) {
   el.timerBox.style.display = "inline-block";
   el.timerText.textContent = `${timeLeftMB}s`;
   el.timerBox.style.backgroundColor = "#ffe680";
+
+  // ✅ Start looping tick sound
+  if (tickSound) {
+    tickSound.currentTime = 0;
+    tickSound.play();
+  }
 
   timerIntervalMB = setInterval(() => {
     timeLeftMB--;
@@ -195,6 +162,12 @@ function startTimerMB(answer) {
 
     if (timeLeftMB <= 0) {
       clearInterval(timerIntervalMB);
+      // ⏹ Stop tick sound
+      tickSound.pause();
+      tickSound.currentTime = 0;
+      // 🔊 Play buzzer
+      buzzer.currentTime = 0;
+      buzzer.play();
       el.timerBox.style.display = "none";
       showAnswerText(answer);
       disableAnswerButtonsMB();
@@ -204,10 +177,8 @@ function startTimerMB(answer) {
 
 function showAnswerButtonsMB(answer) {
   el.questionBox.querySelectorAll(".quiz-action").forEach(b => b.remove());
-
   const btnCorrect = document.createElement("button");
   const btnWrong = document.createElement("button");
-
   btnCorrect.textContent = "Correct";
   btnWrong.textContent = "Wrong";
   btnCorrect.className = "quiz-action quiz-btn";
@@ -216,22 +187,37 @@ function showAnswerButtonsMB(answer) {
   btnCorrect.onclick = () => {
     if (selectedHouseMB) {
       updateScoreMB(selectedHouseMB, 10);
-      // 🎉 Prompt for correct answer
       alert(`✅ ${selectedHouseMB.toUpperCase()} House gains +10 points!`);
     }
     clearInterval(timerIntervalMB);
     el.timerBox.style.display = "none";
     showAnswerText(answer);
     disableAnswerButtonsMB();
+    // ⏹ Stop tick sound
+    tickSound.pause();
+    tickSound.currentTime = 0;
+    // 🎉 Play hurray
+    hurraySound.currentTime = 0;
+    hurraySound.play();
   };
 
   btnWrong.onclick = () => {
     clearInterval(timerIntervalMB);
     el.timerBox.style.display = "none";
-    // ❌ Prompt for wrong answer
+
+    // ❌ Wrong answer prompt
     alert(`❌ ${selectedHouseMB ? selectedHouseMB.toUpperCase() : "House"} got it wrong. Passed to audience.`);
+
     showAnswerText(answer);
     disableAnswerButtonsMB();
+
+    // ⏹ Stop tick sound if still playing
+    tickSound.pause();
+    tickSound.currentTime = 0;
+
+    // No hurray here, only buzzer if you want to emphasize wrong
+    buzzer.currentTime = 0;
+    buzzer.play();
   };
 
   el.questionBox.appendChild(document.createElement("br"));
@@ -244,7 +230,6 @@ function disableAnswerButtonsMB() {
     btn.disabled = true;
   });
 }
-
 
 function updateScoreMB(houseId, delta) {
   const data = JSON.parse(localStorage.getItem("houseScores")) || [
@@ -261,24 +246,18 @@ function updateScoreMB(houseId, delta) {
   localStorage.setItem("houseScores", JSON.stringify(data));
 }
 
-
 function resetQuestionAreaMB() {
   clearInterval(timerIntervalMB);
-
- 
   el.questionBox.innerHTML = "";
   el.questionBox.style.display = "none";
-
   el.answerText.textContent = "";
   el.timerBox.style.display = "none";
   el.timerBox.style.backgroundColor = "#ffe680";
-
- 
   el.questionBox.querySelectorAll(".quiz-action").forEach(b => b.remove());
 }
 
 function hideAllQuestionButtons() {
-  ["history", "science", "sport", "maths","currentaffair"].forEach(cls => hideCategoryButtons(cls));
+  ["history", "science", "sport", "maths", "currentaffair", "movies"].forEach(cls => hideCategoryButtons(cls));
 }
 
 function hideCategoryButtons(cls) {
@@ -293,5 +272,4 @@ function showCategoryHeaders() {
 
 function showAnswerText(answer) {
   el.answerText.textContent = "Answer: " + answer;
-
 }
