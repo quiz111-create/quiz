@@ -156,29 +156,31 @@ function showAnswerButtons() {
   btnCorrect.textContent = "Correct";
   btnWrong.textContent = "Wrong";
   btnCorrect.className = btnWrong.className = "quiz-btn";
+  
+btnCorrect.onclick = () => {
+  clearInterval(timerInterval);   // stop ticking
+  stopAllSounds();
+  if (hurraySound) hurraySound.play();
 
-  btnCorrect.onclick = () => {
-    stopAllSounds();
-    if (hurraySound) hurraySound.play();
+  updateScore(selectedHouse, 10);
 
-    updateScore(selectedHouse, 10);
+  setTimeout(() => {
+    alert("✅ Correct! +10 points added to " + selectedHouse.toUpperCase());
+    disableAnswerButtons();
+    showCorrectAnswer();
+  }, 200);
+};
 
-    setTimeout(() => {
-      alert("✅ Correct! +10 points added to " + selectedHouse.toUpperCase());
-      disableAnswerButtons();
-      showCorrectAnswer();
-    }, 200);
-  };
+btnWrong.onclick = () => {
+  clearInterval(timerInterval);   // stop ticking
+  stopAllSounds();
 
-  btnWrong.onclick = () => {
-    stopAllSounds();
-
-    setTimeout(() => {
-      alert("❌ Wrong! No points.");
-      disableAnswerButtons();
-      showCorrectAnswer();
-    }, 200);
-  };
+  setTimeout(() => {
+    alert("❌ Wrong! No points.");
+    disableAnswerButtons();
+    showCorrectAnswer();
+  }, 200);
+};
 
   questionBox.appendChild(document.createElement("br"));
   questionBox.appendChild(btnCorrect);
