@@ -249,6 +249,7 @@ function passQuestion() {
   questionPassed = true;
   passCount++;
   if (tickSound) { tickSound.pause(); tickSound.currentTime = 0; }
+    if (buzzer) { buzzer.currentTime = 0; buzzer.play(); }
 
   if (passCount >= houses.length) {
     rightContainer.innerHTML = `
