@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>hello</title> 
+    <link rel="stylesheet" href="quiz1.css">
+    <link rel="stylesheet" href="quiz.css">
+  
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+<a href="index.html"><button class="extraBtn" id="home"><i class="fas fa-home"></i> Home</button></a>
+<button class="extraBtn" onclick="rulesig()"id="rules"><i class="fa-solid fa-book"></i> Rules</button><br><br>
+<div class="head">
+    <center><h1 style="text-align: center; background-color: #9399f3; padding: 10px; width: 800px; border-radius:30px;"><b>Fluorescent Secondary School</b></h1></center>
+    <center><h2 style="text-align: center; background-color: bisque; width: 300px; padding: 10px; border-radius:50px ;"><b>Quiz Competition-2025</b></h2></center>
+</div>
+<br>
+  <div id="sigandsoundrule"></div>
+
+
+<div id="popupsig">
+  <p>a. It is a selection round and each team will be asked to select the
+number of their choice in turn from 1 to 4.<br>
+b. One question is asked to a team in this category and only the team
+captain’s answer will be valid.<br>
+c. 30 seconds will be given for the first team, 15 seconds for the
+second team, and 10 seconds for 3 rd and 4 th team to answer the
+questions.<br>
+d. Each correct answer will be awarded 10 marks. The wrong attempt
+will not cost any marks. It is a transferable round.<br>
+e. In case the team fails to answer, the question will be passed to the
+audience.</p>
+  <button onclick="hidesig()"class="extraBtn">Close</button>
+</div>
+
+<center>
+<div class="circle" id="generalcrcl1"></div>
+<div class="main">
+  <div class="questions">
+    <label><a href="gambling.html"><i class="fa-solid fa-arrow-left fa-beat"></i> Sight & Sound Round</a></label><br>
+    <hr width="90%" size="3px" color="grey"><br>
+<button class="extraBtn" id="showSightSound" onclick="showSightSound()">Start Sight & Sound Round</button>
+    <div id="sightSoundButtons" style="display:none;">
+       <button class="questions" onclick="Sight()" id="sight"><b>Sight</b> </button><br><br>
+     <button class="sight" onclick="myfunction(event)">1</button>
+    <button class="sight" onclick="myfunction(event)">2</button>
+    <button class="sight" onclick="myfunction(event)">3</button>
+    <button class="sight" onclick="myfunction(event)">4</button>
+    <button class="sight" onclick="myfunction(event)">5</button>
+    <button class="sight" id="back" onclick="back4()">Back</button>
+    <button class="questions" onclick="Sound(event)" id="sound"><b>Sound</b></button><br> <br>
+    <button class="sound" onclick="myfunction(event)">1</button>
+    <button class="sound" onclick="myfunction(event)">2</button>
+    <button class="sound" onclick="myfunction(event)">3</button>
+    <button class="sound" onclick="myfunction(event)">4</button>
+    <button class="sound" onclick="myfunction()">5</button>
+    <button class="sound" id="back" onclick="back5()">Back</button>
+</div><br><br><br><br>
+<div id="houseSelectSS" style="display:none; margin-top:20px;">
+  <h4>Select a House:</h4>
+  <button id="red" class="quiz-btn">RED</button>
+  <button id="blue" class="quiz-btn">BLUE</button>
+  <button id="yellow" class="quiz-btn">YELLOW</button>
+  <button id="green" class="quiz-btn">GREEN</button>
+</div>
+  </div>
+<div class="right">
+  <img id="generalimg" src="https://thumbs.dreamstime.com/b/quiz-time-sign-colorful-brush-design-vector-background-quiz-time-sign-colorful-brush-strokes-125359318.jpg" width="100px">
+  <hr id="hr1" width="90%" size="3px" color="grey">
+
+  <div id="questionBoxSS" style="margin-top:20px; font-size:30px; font-weight:bold; display:none;"></div>
+  <div id="timerBoxSS" 
+       style="width:100px; padding:10px; background:#ffe680; border-radius:10px; margin-top:20px; font-size:25px; font-weight:bold; text-align:center; display:none;">
+    <span id="timerTextSS">30s</span>
+  </div>
+  <div id="imgModal" class="modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); text-align:center;">
+  <span id="closeModal" style="color:white; font-size:30px; cursor:pointer; position:absolute; top:20px; right:40px;">&times;</span>
+  <img id="modalImg" style="max-width:100%; max-height:100%; margin-top:50px; border:5px solid white; border-radius:10px;">
+</div>
+  <div id="answerText" style="font-style:italic; font-size:20px; margin-top:10px;"></div>
+</div>
+
+  <button id="dsply">Display Answer</button>
+  <button id="pass">Pass</button>
+  
+
+  </div>
+</div>
+<div class="circle" id="generalcrcl2"></div>
+      <a href="leaderboard.html"><button class="extraBtn" id="ldrBd">Leaderboard</button></a>
+      <a href="Rapidfire.html"><button class="extraBtn" id="nextRnd">Next round</button></a>
+    </div>
+</center>
+<script src="quiz.js"></script>
+<script src="rules.js"></script>
+<script src="sightandsound.js"></script>
+</body>
+</html>

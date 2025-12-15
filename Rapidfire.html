@@ -1,0 +1,85 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>hello</title> 
+    <link rel="stylesheet" href="quiz1.css">
+    <link rel="stylesheet" href="quiz.css">
+  
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+<a href="index.html"><button class="extraBtn" id="home"><i class="fas fa-home"></i> Home</button></a>
+<button class="extraBtn"onclick="rulerap()" id="rules"><i class="fa-solid fa-book"></i> Rules</button><br><br>
+<div class="head">
+    <center><h1 style="text-align: center; background-color: #9399f3; padding: 10px; width: 800px; border-radius:30px;"><b>Fluorescent Secondary School</b></h1></center>
+    <center><h2 style="text-align: center; background-color: bisque; width: 300px; padding: 10px; border-radius:50px ;"><b>Quiz Competition-2025</b></h2></center>
+</div>
+<br>
+ <div id="rapidrule"></div>
+
+
+<div id="popuprap">
+  <p>
+    a. A set of questions will be asked to choose to each team in turn and
+10 questions will be asked from the given set. The answer should
+be given within 60 seconds.<br>
+b. The team members are also allowed to answer if they know.<br>
+c. Each correct answer will be awarded 10 marks. Wrong attempt will
+not cost any marks.<br>
+d. The passed questions will not be asked to the other team and to the
+audience.<br>
+e. New questions will not be asked until the answer is correct or
+passed.<br>
+  </p>
+  <button onclick="hiderap()"class="extraBtn">Close</button>
+</div>
+<center>
+<div class="circle" id="generalcrcl1"></div>
+<div class="main">
+  <div class="questions">
+    <label><a href="buzzer.html"><i class="fa-solid fa-arrow-left fa-beat"></i> Rapid fire Round</a></label>
+     <hr width="90%" size="3px"color="grey"><br>
+    <button class="startBtn" id="startBtn">1</button>
+    <button class="startBtn" id="startBtn1">2</button>
+    <button  class="startBtn" id="startBtn2">3</button>
+    <button class="startBtn" id="startBtn3">4</button>
+  <div id="houseSelect" style="display:none; margin-top:20px;">
+  <h4>Select a House:</h4>
+  <button onclick="chooseHouse('red')"id="red">RED</button>
+  <button onclick="chooseHouse('blue')"id="blue">BLUE</button>
+  <button onclick="chooseHouse('yellow')"id="yellow">YELLOW</button><br><br>
+  <button onclick="chooseHouse('green')"id="green">GREEN</button>
+</div>
+    <button id="showQn" onclick="showQuestion1()">Show question</button>
+  </div>
+
+  <div class="right">
+  <img id="generalimg" src="https://thumbs.dreamstime.com/b/quiz-time-sign-colorful-brush-design-vector-background-quiz-time-sign-colorful-brush-strokes-125359318.jpg" width="100">
+  <div id="questionBox"><h3 id="timerDisplay"> </h3>
+    <h2 id="questionText"></h2>
+    <button id="Next">Next Question</button>
+  </div>
+
+  <div id="answerPanel">
+    <h4 style="color: chartreuse;">CORRECT ANSWER</h4>
+      <div class="answerColumns">
+    <ul id="leftAnswers"><b></b></ul>
+    <ul id="rightAnswers"><b></b></ul>
+  </div>
+ </div>
+</div>
+<div class="circle" id="generalcrcl2"></div>
+</center><center>
+<div class="nextRoundBtn">
+  <a href="leaderboard.html"><button class="extraBtn" id="ldrBd">Leaderboard</button></a>
+</div>
+</center>
+<script src="rapidfire.js"></script>
+<script src="quiz.js"></script>
+<script src="rules.js"></script>
+</body>
+</html>

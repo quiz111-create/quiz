@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Popup</title>
+<style>
+ /*
+ .outer{
+    width: 200px;
+    height:18px;
+    background-color: white;
+    border:2px solid black;
+    border-radius: 30px;
+   }
+   .timer{
+    width: 50px;
+    height:18px;
+    animation: MyTimer 10s;
+    animation-timing-function: linear;
+    position: relative;
+    background-color: purple;
+    border-radius:30px;
+   }
+   @keyframes MyTimer{
+    0%{
+      width: 0px;
+    }
+    100%{
+      width: 200px;
+    }
+   }
+*/
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      background: #f4f4f4;
+    }
+    #startBtn, #nextBtn {
+      padding: 10px 20px;
+      font-size: 18px;
+      cursor: pointer;
+      margin-bottom: 20px;
+    }
+    #questionBox {
+      display: none;
+      margin-bottom: 20px;
+    }
+    #answerPanel {
+      display: none;
+      background: #fff;
+      padding: 20px;
+      border: 1px solid #ccc;
+    }
+  </style>
+</style>
+</head>
+<body>
+<!--
+<div class="questions">
+    <button class="question" onclick="myFunction(1, this)">1</button>
+    <button class="question" onclick="myFunction(2, this)">2</button>
+    <button class="question" onclick="myFunction(3, this)">3</button>
+    <button class="question" onclick="myFunction(4, this)">4</button>
+    <button class="question" onclick="myFunction(5, this)">5</button>
+    <button class="question" onclick="myFunction(6, this)">6</button>
+    <button class="question" onclick="myFunction(7, this)">7</button>
+    <button class="question" onclick="myFunction(8, this)">8</button>
+    <button class="question" onclick="myFunction(9, this)">9</button>
+    <button class="question" onclick="myFunction(10, this)">10</button>
+</div>
+<div id="questionBox"></div>
+<input type="text" id="answerInput" placeholder="Your answer">
+<button onclick="checkAnswer()">Submit</button>
+<div id="feedback"></div>
+<button id="passBtn" onclick="passQuestion()" style="display:none;">Pass</button>
+<button id="showAnswerBtn" onclick="showCorrectAnswer()" style="display:none;">Show Correct Answer</button>
+<div class="outer">
+    <div class="timer"></div>
+</div>
+<script>
+  const  = {
+    1: "What is 2 + 2?",
+    2: "What is the capital of France?",
+    3: "Name the largest planet?",
+    4: "Who is father of economics?",
+    5: "Who wrote Ramayan?"
+  };
+
+  const answers = {
+    1: "4",
+    2: "Paris",
+    3: "Jupiter",
+    4: "Adam Smith",
+    5: "Valmiki"
+  };
+
+  let currentQ = null;
+  let passCount = 0;
+
+  function myFunction(qNum, btn) {
+    currentQ = qNum;
+    passCount = 0;
+    document.getElementById("questionBox").innerText = questions[qNum];
+    document.getElementById("answerInput").value = "";
+    document.getElementById("feedback").innerText = "";
+    document.getElementById("passBtn").style.display = "none";
+    document.getElementById("showAnswerBtn").style.display = "none";
+  }
+
+  function checkAnswer() {
+    const userAns = document.getElementById("answerInput").value.trim().toLowerCase();
+    const correctAns = answers[currentQ].toLowerCase();
+
+    if (userAns === correctAns) {
+      document.getElementById("feedback").innerText = "✅ Correct!";
+      document.getElementById("passBtn").style.display = "none";
+      document.getElementById("showAnswerBtn").style.display = "none";
+    } else {
+      document.getElementById("feedback").innerText = "❌ Wrong answer.";
+      document.getElementById("passBtn").style.display = "inline";
+    }
+  }
+
+  function passQuestion() {
+    passCount++;
+    document.getElementById("feedback").innerText = `Pass used: ${passCount}`;
+    if (passCount >= 3) {
+      document.getElementById("showAnswerBtn").style.display = "inline";
+    }
+  }
+
+  function showCorrectAnswer() {
+    document.getElementById("feedback").innerText = `✅ Correct answer: ${answers[currentQ]}`;
+  }
+</script>
+
+-->
+  <button id="startBtn">1</button>
+
+  <div id="questionBox">
+    <h2 id="questionText"></h2>
+    <button id="nextBtn">Next Question</button>
+  </div>
+
+  <div id="answerPanel">
+    <h2>Correct Answers</h2>
+    <ul id="answerList"></ul>
+  </div>
+
+  <script>
+    const questions = [
+      { q: "What is the capital of France?", a: "Paris" },
+      { q: "2 + 2 = ?", a: "4" },
+      { q: "What color is the sky?", a: "Blue" },
+      { q: "Who wrote Hamlet?", a: "Shakespeare" },
+      { q: "What is H2O?", a: "Water" },
+      { q: "Fastest land animal?", a: "Cheetah" },
+      { q: "Largest planet?", a: "Jupiter" },
+      { q: "HTML stands for?", a: "HyperText Markup Language" },
+      { q: "Speed of light?", a: "299,792 km/s" },
+      { q: "Python is a ___?", a: "Programming language" }
+    ];
+
+    let current = 0;
+
+    const startBtn = document.getElementById("startBtn");
+    const nextBtn = document.getElementById("nextBtn");
+    const questionBox = document.getElementById("questionBox");
+    const questionText = document.getElementById("questionText");
+    const answerPanel = document.getElementById("answerPanel");
+    const answerList = document.getElementById("answerList");
+
+    startBtn.addEventListener("click", () => {
+      startBtn.style.display = "none";
+      questionBox.style.display = "block";
+      showQuestion();
+    });
+
+    nextBtn.addEventListener("click", () => {
+      current++;
+      if (current < questions.length) {
+        showQuestion();
+      } else {
+        questionBox.style.display = "none";
+        showAnswers();
+      }
+    });
+
+    function showQuestion() {
+      questionText.textContent = questions[current].q;
+    }
+
+    function showAnswers() {
+      answerPanel.style.display = "block";
+      questions.forEach((item, index) => {
+        const li = document.createElement("li");
+        li.textContent = `${index + 1}. ${item.a}`;
+        answerList.appendChild(li);
+      });
+    }
+  </script>
+</body>
+</html>

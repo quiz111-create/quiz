@@ -1,0 +1,61 @@
+<!DoCTYPE html>
+<html>
+<head>
+<title>Index</title>
+<link href="quiz.css" rel="stylesheet">
+<link href="quiz1.css" rel="stylesheet">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body> 
+    <div class="head">
+    <center><h1 style="text-align: center; background-color: #9399f3; padding: 10px; width: 800px; border-radius:30px;"><b>Fluorescent Secondary School</b></h1></center>
+    <center><h2 style="text-align: center; background-color: bisque; width: 300px; padding: 10px; border-radius:50px ;" id="indh2"><b>Quiz Competition-2025</b></h2></center>
+     <center><img src="fluorescent.png" width="150px"></center>
+    </div>
+    <center>
+    <div class="circle" id="crcl1"></div>
+    <div style="align-items:center" class="content" >
+        <img id="indeximg" src="https://thumbs.dreamstime.com/b/quiz-time-sign-colorful-brush-design-vector-background-quiz-time-sign-colorful-brush-strokes-125359318.jpg" width=200px height="150px">
+        <br>
+        <p style="background-color: #9399f3; width: 190px;height: 50px; padding: 10px 0px 0px 20px; border-radius: 30px;" id="rounds"><b>Select the round</b></p>
+        <form>
+            <select id="selectRound" name="stream">
+            <option value="#" hidden>Select an option</option>
+            <option value="general.html"> General round</option>
+            <option value="option.html">Option round</option>
+            <option value="buzzer.html"> Buzzer round</option>
+            <option value="individual.html">Individual round</option>
+            <option value="riddle.html">Riddle round</option>
+            <option value="lions.html">Lions Club Round</option>
+            <option value="npl.html">Npl round</option>
+            <option value="4 pic one word.html">4 pic one word</option>
+            <option value="mixed bag.html">Mix bag round</option>
+            <option value="Gambling.html">Gambling round</option>
+            <option value="sight&sound.html">Sight&sound round</option>
+            <option value="Rapidfire.html"> Rapid fire round</option>
+           
+            
+             
+            
+             
+          
+            
+            
+            </select>
+        </form>
+        <br>
+        <button class="button" onclick="pageChange()"> Continue </button>
+    </div>
+    <div class="circle" id="crcl2"></div>
+     <div class="nextRoundBtn">
+<a href="leaderboard.html"><button class="extraBtn" id="ldrBd">Leaderboard</button></a>
+<a href="participants.html"><button class="extraBtn" id="prtcpnts">Participants</button></a>
+<button onclick="playSound()"class="extraBtn" id="anthem">National Anthem</button>
+<a href="thanks.html"><button class="extraBtn" id="prtcpnts">Developer</button></a>
+<audio id="sound" src="anthem.mp3"></audio>
+</div>
+    </center>
+<script src="quiz.js"></script>
+</body>
+</html>
+

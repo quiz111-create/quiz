@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>hello</title> 
+    <link rel="stylesheet" href="quiz1.css">
+    <link rel="stylesheet" href="quiz.css">
+  
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+ <a href="index.html"><button class="extraBtn" id="home"><i class="fas fa-home"></i> Home</button></a>
+<button class="extraBtn" onclick="rulegen()"id="rules"><i class="fa-solid fa-book"></i> Rules</button><br><br>
+<div class="head">
+    <center><h1 style="text-align: center; background-color: #9399f3; padding: 10px; width: 800px; border-radius:30px;"><b>Fluorescent Secondary School</b></h1></center>
+    <center><h2 style="text-align: center; background-color: bisque; width: 300px; padding: 10px; border-radius:50px ;"><b>Quiz Competition-2025</b></h2></center>
+</div>
+<br>
+
+
+
+  <div id="genrule"></div>
+
+
+<div id="popupgen">
+  <p style="color:black;">a. Participants are asked very general questions from the different
+events in this category.<br>
+  b. There will be four rounds and only the team captain can answer.
+However, he or she can consult with his/her team members of
+his/her team.<br>
+   c. It is a transferable round and 10 marks will be awarded for the
+correct answer and 5 marks for the passed question’s answer. There
+will be no negative mark for the wrong attempt.<br>
+ d. In case all the teams failed to give correct answers, the question
+will be passed to the audience.<br>
+e. First team will get 30 seconds, the second 15 seconds, 3rd and 4th
+team will get 10 seconds to answer the questions.<br>
+f. This round will start on Clockwise Basis, followed by
+anticlockwise, and so on.<br>
+g. The Captain will select the question from numbers 1 to 16 as per
+their convenience.<br>
+h. In case of conflict, the decision of the judges will be the final
+decision.</p>
+  <button onclick="hidegen()"class="extraBtn">Close</button>
+</div>
+
+<center>
+<div class="circle" id="generalcrcl1"></div>
+<div class="main">
+  <div class="questions">
+    <label><a href="index.html"><i class="fa-solid fa-arrow-left fa-beat"></i> General Round</a></label><br>
+    <hr width="90%" size="3px"color="grey"><br>
+    <button class="question" onclick="myFunction(1, this)">1</button>
+    <button class="question" onclick="myFunction(2, this)">2</button>
+    <button class="question" onclick="myFunction(3, this)">3</button>
+    <button class="question" onclick="myFunction(4, this)">4</button>
+    <button class="question" onclick="myFunction(5, this)">5</button>
+    <button class="question" onclick="myFunction(6, this)">6</button>
+    <button class="question" onclick="myFunction(7, this)">7</button>
+    <button class="question" onclick="myFunction(8, this)">8</button>
+    <button class="question" onclick="myFunction(9, this)">9</button>
+    <button class="question" onclick="myFunction(10, this)">10</button>
+    <button class="question" onclick="myFunction(11, this)">11</button>
+    <button class="question" onclick="myFunction(12, this)">12</button>
+    <button class="question" onclick="myFunction(13, this)">13</button>
+    <button class="question" onclick="myFunction(14, this)">14</button>
+    <button class="question" onclick="myFunction(15, this)">15</button>
+    <button class="question" onclick="myFunction(16, this)">16</button>
+    <button id="showQn" onclick="showQuestion()">Show question</button>
+    <audio id="hurraySound" src="hurray.mp3"></audio>
+<audio id="sadSound" src="sad.mp3"></audio>
+
+  </div>
+   <div class="right">
+    <img id="generalimg" src="https://thumbs.dreamstime.com/b/quiz-time-sign-colorful-brush-design-vector-background-quiz-time-sign-colorful-brush-strokes-125359318.jpg" width="100px">
+    <div id="questionDisplay" style="margin-top: 20px; font-weight: bold;">
+      
+    </div>
+    <hr id="hr1" width="90%" size="3px" color="grey">
+    <br>
+    <div class="outer"id="outer">
+    <div class="timer"id="timer"></div>
+   
+    <div id="stop"style="display:none;"class="stop"> Times Up!</div>
+<div class="circle" id="generalcrcl2"></div>
+    </center>
+<center>
+  <div class="nextRoundBtn">
+<a href="leaderboard.html"><button class="extraBtn" id="ldrBd">Leaderboard</button></a>
+<a href="option.html"><button class="extraBtn" id="nextRnd">Next round</button></a>
+  </div>
+</center>
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+<script src="quiz.js"></script>
+<script src="general.js"></script>
+<script src="rules.js"></script>
+</body>
+</html>

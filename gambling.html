@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>hello</title> 
+    <link rel="stylesheet" href="quiz1.css">
+    <link rel="stylesheet" href="quiz.css">
+  
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+<div id="gambrule"></div>
+<div id="popupgamb" style="display: none;">  <!-- Added display: none; to hide by default -->
+  <p>a. Only one question will be asked to each group in this round from
+the selected category.<br>
+b. Each team will select the question of their choice from the
+Platinum, Diamond, and Gold Round.<br>
+c. The correct answer of Platinum, Diamond, and Gold will be
+awarded 30, 20 and 10 respectively.<br>
+d. Half of the full mark is reduced for each wrong answer and it is a
+nontransferable round.<br>
+e. The time to answer the question is 30 seconds for all teams.</p>
+  <button onclick="hidegamb()" class="extraBtn">Close</button>
+</div>
+
+<a href="index.html"><button class="extraBtn" id="home"><i class="fas fa-home"></i> Home</button></a>
+<button class="extraBtn" onclick="rulegamb()" id="rules"><i class="fa-solid fa-book"></i> Rules</button><br><br>
+<div class="head">
+    <center><h1 style="text-align: center; background-color: #9399f3; padding: 10px; width: 800px; border-radius:30px;"><b>Fluorescent Secondary School</b></h1></center>
+    <center><h2 style="text-align: center; background-color: bisque; width: 300px; padding: 10px; border-radius:50px ;"><b>Quiz Competition-2025</b></h2></center>
+</div>
+<br>
+<center>
+<div class="circle" id="generalcrcl1"></div>
+<div class="main">
+  <div class="questions">
+    <label><a href="mixed bag.html"><i class="fa-solid fa-arrow-left fa-beat"></i> Gambling Round</a></label><br>
+    <hr width="90%" size="3px" color="grey">
+      <center>
+        <button class="extraBtn" id="startGambling"><b>Start Gambling Round</b></button><br><br>
+
+<div id="gamblingButtons" style="display:none;">
+  <button class="questions" id="gold"><b>Gold</b></button><br><br>
+  <button class="questions" id="diamond"><b>Diamond</b></button><br><br>
+  <button class="questions" id="platinum"><b>Platinum</b></button><br><br>  <!-- Fixed ID from "platinium" to "platinum" -->
+</div>
+<div class="categorySet gold" style="display:none;">
+  <button class="gold num">1</button>
+  <button class="gold num">2</button>
+  <button class="gold num">3</button>
+  <button class="gold num">4</button>
+  <button class="gold num">5</button><BR>
+  <button class="gold" id="backGold">Back</button>
+</div>
+
+<div class="categorySet diamond" style="display:none;">
+  <button class="diamond num">1</button>
+  <button class="diamond num">2</button>
+  <button class="diamond num">3</button>
+  <button class="diamond num">4</button>
+  <button class="diamond num">5</button><BR>
+  <button class="diamond" id="backDiamond">Back</button>
+</div>
+
+<div class="categorySet platinum" style="display:none;">
+  <button class="platinum num">1</button>
+  <button class="platinum num">2</button>
+  <button class="platinum num">3</button>
+  <button class="platinum num">4</button>
+  <button class="platinum num">5</button><BR>
+  <button class="platinum" id="backPlatinum">Back</button>
+</div>
+ <br><Br><br><br><br><br><br><br><br>
+     <div id="houseSelectG" style="display:none; margin-top:20px;">  <!-- Added missing house select div -->
+      <h4>Select a House:</h4>
+      <button id="redG" class="quiz-btn">RED</button>
+      <button id="blueG" class="quiz-btn">BLUE</button>
+      <button id="yellowG" class="quiz-btn">YELLOW</button>
+      <button id="greenG" class="quiz-btn">GREEN</button>
+    </div>
+
+     </center>
+  </div>
+  <div class="right">
+    <img id="generalimg" src="https://thumbs.dreamstime.com/b/quiz-time-sign-colorful-brush-design-vector-background-quiz-time-sign-colorful-brush-strokes-125359318.jpg" width="100px"> 
+    
+
+    
+    <div id="Display" style="margin-top: 20px; font-weight: bold;"></div>
+    <div id="questionBox"></div>
+    <div id="timerBox" style="font-size: 20px; color: red; margin-top: 10px;"></div>
+
+  </div>
+</div>
+<div class="circle" id="generalcrcl2"></div>
+      <a href="leaderboard.html"><button class="extraBtn" id="ldrBd">Leaderboard</button></a>
+      <a href="sight&sound.html"><button class="extraBtn" id="nextRnd">Next round</button></a>
+    </div>
+</center>
+<script src="quiz.js"></script>
+<script src="rules.js"></script>
+<script src="gambling.js"></script>
+</body>
+</html>
