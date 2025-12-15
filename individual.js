@@ -3,7 +3,14 @@ let timeLeft = 30;
 let currentQuestionIndex = null;
 let selectedHouse = null;
 
-// Questions
+// 🔊 Sounds
+const tickSound = document.getElementById("tickSound");
+const buzzer = document.getElementById("buzzer");
+const hurraySound = document.getElementById("hurraySound");
+
+// ===============================
+// QUESTIONS
+// ===============================
 const questions = [
   { q: "What is your name?", a: "Your actual name" },
   { q: "Where do you live?", a: "Your location" },
@@ -23,7 +30,9 @@ const questions = [
   { q: "What is your favorite sport?", a: "Your favorite sport" }
 ];
 
-
+// ===============================
+// SCORE STORAGE
+// ===============================
 function getScores() {
   return JSON.parse(localStorage.getItem("houseScores")) || [
     { id: "red", name: "RED", color: "red", score: 0 },
@@ -47,12 +56,18 @@ function updateScore(houseId, delta) {
   saveScores(data);
 }
 
-// --- DOM elements ---
+// ===============================
+// DOM ELEMENTS
+// ===============================
 const buttonContainer = document.getElementById("buttonss");
 const questionBox = document.getElementById("questionBox");
 const houseSelect = document.getElementById("houseSelect");
+const timerBox = document.getElementById("timerBox");
+const timerText = document.getElementById("timerText");
 
-// Show question buttons
+// ===============================
+// SHOW QUESTION BUTTONS
+// ===============================
 function showQuestion2() {
   buttonContainer.style.display = "inline-block";
   document.getElementById("showQn").style.display = "none";
@@ -63,8 +78,9 @@ function showQuestion2() {
 questionBox.style.fontSize = "40px";
 document.getElementById("showQn").addEventListener("click", showQuestion2);
 
-// Create question buttons
-// Create question buttons
+// ===============================
+// CREATE QUESTION BUTTONS
+// ===============================
 questions.forEach((q, index) => {
   const btn = document.createElement("button");
   btn.textContent = index + 1;
@@ -78,21 +94,21 @@ questions.forEach((q, index) => {
     clearInterval(timerInterval);
     timeLeft = 30;
 
-    // show house selection first (do NOT show question yet)
     houseSelect.style.display = "block";
-    questionBox.style.display = "none"; // hide until house chosen
+    questionBox.style.display = "none";
   };
 
   buttonContainer.appendChild(btn);
 });
 
-// House selection
+// ===============================
+// HOUSE SELECTION
+// ===============================
 document.querySelectorAll("#houseSelect button").forEach(btn => {
   btn.addEventListener("click", () => {
-    selectedHouse = btn.id; // red, blue, yellow, green
+    selectedHouse = btn.id;
     houseSelect.style.display = "none";
 
-    // ✅ Now show the question after house is chosen
     questionBox.innerHTML = `<div>${questions[currentQuestionIndex].q}</div>`;
     questionBox.style.display = "block";
 
@@ -101,66 +117,109 @@ document.querySelectorAll("#houseSelect button").forEach(btn => {
   });
 });
 
-// Timer
+// ===============================
+// TIMER WITH SOUND
+// ===============================
 function startTimer() {
-  const timerText = document.getElementById("timerText");
-  const timerBox = document.getElementById("timerBox");
   timerBox.style.display = "inline-block";
   timerBox.style.backgroundColor = "#ffe680";
+  timerText.textContent = `${timeLeft}s`;
+
+  clearInterval(timerInterval);
 
   timerInterval = setInterval(() => {
     timeLeft--;
     timerText.textContent = `${timeLeft}s`;
+
+    // ⏱ Tick sound
+    if (tickSound && timeLeft > 0) {
+      tickSound.currentTime = 0;
+      tickSound.play();
+    }
 
     if (timeLeft <= 5) timerBox.style.backgroundColor = "#ff6868";
     else if (timeLeft <= 10) timerBox.style.backgroundColor = "#ffd966";
 
     if (timeLeft <= 0) {
       clearInterval(timerInterval);
-      alert("⏰ Time up!");
-      disableAnswerButtons();
-      showCorrectAnswer();
+
+      if (tickSound) {
+        tickSound.pause();
+        tickSound.currentTime = 0;
+      }
+
+      // 🔊 Buzzer BEFORE alert
+      if (buzzer) {
+        buzzer.currentTime = 0;
+        buzzer.play();
+      }
+
+      setTimeout(() => {
+        alert("⏰ Time up!");
+        disableAnswerButtons();
+        showCorrectAnswer();
+        timerBox.style.display = "none";
+      }, 400);
     }
   }, 1000);
 }
 
-// Show Correct/Wrong buttons
+// ===============================
+// ANSWER BUTTONS
+// ===============================
 function showAnswerButtons() {
   const btnCorrect = document.createElement("button");
   const btnWrong = document.createElement("button");
 
   btnCorrect.textContent = "Correct";
   btnWrong.textContent = "Wrong";
-  btnCorrect.style.height = "50px";
-btnWrong.style.height = "50px";
-btnCorrect.style.width = "150px";
-btnWrong.style.width = "150px";
-  btnCorrect.className = "quiz-btn";
-  btnWrong.className = "quiz-btn";
+
+  btnCorrect.style.height = btnWrong.style.height = "50px";
+  btnCorrect.style.width = btnWrong.style.width = "150px";
+
+  btnCorrect.className = btnWrong.className = "quiz-btn";
 
   btnCorrect.onclick = () => {
-    if (selectedHouse) {
-      updateScore(selectedHouse, 10); // give selected house 10 points
+    clearInterval(timerInterval);
+
+    if (tickSound) {
+      tickSound.pause();
+      tickSound.currentTime = 0;
     }
+
+    if (hurraySound) {
+      hurraySound.currentTime = 0;
+      hurraySound.play();
+    }
+
+    if (selectedHouse) updateScore(selectedHouse, 10);
+
     disableAnswerButtons();
     showCorrectAnswer();
-    alert("✅ Correct! +10 points added to " + selectedHouse.toUpperCase() + " house.");
-   clearInterval(timerInterval);
-    timeLeft = 30;
-    timerBox.style.display="none";
+    timerBox.style.display = "none";
 
+    setTimeout(() => {
+      alert("✅ Correct! +10 points added to " + selectedHouse.toUpperCase() + " house.");
+    }, 300);
   };
 
-
   btnWrong.onclick = () => {
+    clearInterval(timerInterval);
+
+    if (tickSound) {
+      tickSound.pause();
+      tickSound.currentTime = 0;
+    }
+
+  
+
     disableAnswerButtons();
     showCorrectAnswer();
-    alert("❌ Wrong! No points.");
-     clearInterval(timerInterval);
-    timeLeft = 30;
-    timerBox.style.display="none";
+    timerBox.style.display = "none";
 
-    
+    setTimeout(() => {
+      alert("❌ Wrong! No points.");
+    }, 300);
   };
 
   questionBox.appendChild(document.createElement("br"));
@@ -168,6 +227,9 @@ btnWrong.style.width = "150px";
   questionBox.appendChild(btnWrong);
 }
 
+// ===============================
+// HELPERS
+// ===============================
 function disableAnswerButtons() {
   document.querySelectorAll("#questionBox button").forEach(btn => {
     btn.disabled = true;
@@ -176,18 +238,20 @@ function disableAnswerButtons() {
 
 function showCorrectAnswer() {
   if (document.getElementById("correctAnswerText")) return;
+
   const answerText = document.createElement("p");
   answerText.id = "correctAnswerText";
   answerText.style.color = "green";
   answerText.style.fontWeight = "bold";
   answerText.style.fontSize = "30px";
   answerText.textContent = "Answer: " + questions[currentQuestionIndex].a;
+
   questionBox.appendChild(answerText);
 }
 
-// Display Answer button
+// ===============================
+// DISPLAY ANSWER BUTTON
+// ===============================
 document.getElementById("dsply").addEventListener("click", () => {
-  if (currentQuestionIndex !== null) {
-    showCorrectAnswer();
-  }
+  if (currentQuestionIndex !== null) showCorrectAnswer();
 });

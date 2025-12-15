@@ -37,11 +37,13 @@ const elG = {
   questionBox: document.getElementById("questionBox"),
   timerBox: document.getElementById("timerBox"),
   display: document.getElementById("Display"),
-  generalImg: document.getElementById("generalimg")
+  generalImg: document.getElementById("generalimg"),
+  main: document.querySelector(".main"),
 };
 
 // Start round
 elG.startBtn.addEventListener("click", () => {
+  elG.main.style.height = "auto";
   elG.startBtn.style.display = "none";
   elG.gamblingButtons.style.display = "block";
 });
@@ -50,6 +52,7 @@ elG.startBtn.addEventListener("click", () => {
   document.getElementById(cat).addEventListener("click", () => {
     document.querySelectorAll(".categorySet").forEach(set => set.style.display = "none");
     document.querySelector(`.categorySet.${cat}`).style.display = "block";
+    elG.main.style.height = "40rem";
     elG.gamblingButtons.style.display = "none";
     currentCategoryG = cat;
   });
@@ -62,8 +65,9 @@ elG.startBtn.addEventListener("click", () => {
     backBtn.addEventListener("click", () => {
       document.querySelectorAll(".categorySet").forEach(set => set.style.display = "none");
       elG.gamblingButtons.style.display = "block";
-
+      elG.main.style.height = "auto";
       elG.questionBox.innerHTML = "";
+
       elG.display.textContent = "";
       elG.timerBox.textContent = "";
 

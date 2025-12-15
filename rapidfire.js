@@ -3,7 +3,6 @@ document.addEventListener("DOMContentLoaded", () => {
   // ----------------------------
   // QUESTION SETS
   // ----------------------------
-
   const questions1 = [
     { q: "Capital of France?", a: "Paris" },
     { q: "2 + 2 = ?", a: "4" },
@@ -33,60 +32,95 @@ document.addEventListener("DOMContentLoaded", () => {
   const questions3 = [
     { q: "What is the boiling point of water?", a: "100°C" },
     { q: "Which organ pumps blood?", a: "Heart" },
-    { q: "What is the chemical symbol for gold?", a: "Au" },
-    { q: "Which vitamin comes from sunlight?", a: "Vitamin D" },
-    { q: "Which part of the plant makes food?", a: "Leaf" },
-    { q: "What is the hardest natural substance?", a: "Diamond" },
-    { q: "Which gas do humans breathe in?", a: "Oxygen" },
-    { q: "What is the center of an atom?", a: "Nucleus" },
-    { q: "Which planet has rings?", a: "Saturn" },
-    { q: "What is the unit of force?", a: "Newton" }
+    { q: "Chemical symbol for gold?", a: "Au" },
+    { q: "Vitamin from sunlight?", a: "Vitamin D" },
+    { q: "Plant part that makes food?", a: "Leaf" },
+    { q: "Hardest natural substance?", a: "Diamond" },
+    { q: "Gas humans breathe in?", a: "Oxygen" },
+    { q: "Center of atom?", a: "Nucleus" },
+    { q: "Planet with rings?", a: "Saturn" },
+    { q: "Unit of force?", a: "Newton" }
   ];
 
   const questions4 = [
-    { q: "What does CPU stand for?", a: "Central Processing Unit" },
-    { q: "Who founded Microsoft?", a: "Bill Gates" },
-    { q: "What is the shortcut for copy?", a: "Ctrl + C" },
-    { q: "Which device stores data?", a: "Hard drive" },
-    { q: "What does AI stand for?", a: "Artificial Intelligence" },
-    { q: "Which company makes iPhones?", a: "Apple" },
-    { q: "What is the full form of USB?", a: "Universal Serial Bus" },
-    { q: "What is the brain of the computer?", a: "CPU" },
-    { q: "Which language is used for web?", a: "HTML" },
-    { q: "What is the full form of Wi-Fi?", a: "Wireless Fidelity" }
+    { q: "CPU stands for?", a: "Central Processing Unit" },
+    { q: "Founder of Microsoft?", a: "Bill Gates" },
+    { q: "Shortcut for copy?", a: "Ctrl + C" },
+    { q: "Device that stores data?", a: "Hard drive" },
+    { q: "AI stands for?", a: "Artificial Intelligence" },
+    { q: "Company that makes iPhone?", a: "Apple" },
+    { q: "USB full form?", a: "Universal Serial Bus" },
+    { q: "Brain of computer?", a: "CPU" },
+    { q: "Language for web?", a: "HTML" },
+    { q: "Wi-Fi full form?", a: "Wireless Fidelity" }
   ];
 
+  // ----------------------------
+  // STATE
+  // ----------------------------
   let current = 0;
   let activeQuestions = [];
   let selectedHouse = null;
 
+  let timerInterval = null;
+  let timeLeft = 60;
+
+  // ----------------------------
+  // DOM
+  // ----------------------------
   const questionBox = document.getElementById("questionBox");
   const questionText = document.getElementById("questionText");
   const answerPanel = document.getElementById("answerPanel");
   const leftAnswers = document.getElementById("leftAnswers");
   const rightAnswers = document.getElementById("rightAnswers");
   const houseSelect = document.getElementById("houseSelect");
-
-  let timerInterval = null;
-  let timeLeft = 60;
   const timerDisplay = document.getElementById("timerDisplay");
 
+  const buzzer = document.getElementById("buzzer");
+  const tickSound = document.getElementById("tickSound");
+  const hurraySound = document.getElementById("hurraySound");
+
+  // ----------------------------
+  // TIMER (FIXED TICK SOUND)
+  // ----------------------------
   function startSetTimer() {
     clearInterval(timerInterval);
     timeLeft = 60;
 
+    if (tickSound) {
+      tickSound.pause();
+      tickSound.currentTime = 0;
+    }
+
     timerDisplay.textContent = `${timeLeft}s`;
+    timerDisplay.style.background = "#ffe680";
+    timerDisplay.style.fontSize = "28px";
+    timerDisplay.style.fontWeight = "bold";
+    timerDisplay.style.textAlign = "center";
 
     timerInterval = setInterval(() => {
       timeLeft--;
       timerDisplay.textContent = `${timeLeft}s`;
-      timerDisplay.style.backgroundColor = "#ffe680";
-      timerDisplay.style.fontSize = "28px";
-      timerDisplay.style.fontWeight = "bold";
-      timerDisplay.style.textAlign = "center";
+
+      // ✅ tick continues even after NEXT
+      if (tickSound && timeLeft > 0) {
+        tickSound.currentTime = 0;
+        tickSound.play().catch(() => {});
+      }
 
       if (timeLeft <= 0) {
         clearInterval(timerInterval);
+
+        if (tickSound) {
+          tickSound.pause();
+          tickSound.currentTime = 0;
+        }
+
+        if (buzzer) {
+          buzzer.currentTime = 0;
+          buzzer.play();
+        }
+
         autoFinishSet();
       }
     }, 1000);
@@ -97,27 +131,17 @@ document.addEventListener("DOMContentLoaded", () => {
     showAnswers();
   }
 
-  const qButtons = document.querySelectorAll("#questionList button, #questionList .qbtn");
-
-  qButtons.forEach(btn => {
-    btn.style.background = "#4d5cff";
-    btn.style.color = "white";
-    btn.style.padding = "10px 15px";
-    btn.style.borderRadius = "10px";
-    btn.style.margin = "5px";
-    btn.style.border = "none";
-    btn.style.cursor = "pointer";
-    btn.style.fontWeight = "600";
-  });
-
-  function startRound(questionsSet) {
-    houseSelect.style.display = "block";
-    activeQuestions = questionsSet;
+  // ----------------------------
+  // ROUND LOGIC
+  // ----------------------------
+  function startRound(set) {
+    activeQuestions = set;
     current = 0;
+    houseSelect.style.display = "block";
     answerPanel.style.display = "none";
   }
 
-  window.chooseHouse = function(houseId) {
+  window.chooseHouse = function (houseId) {
     selectedHouse = houseId;
     houseSelect.style.display = "none";
     questionBox.style.display = "block";
@@ -143,85 +167,54 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  // -----------------------------
-  // UPDATED ANSWER DISPLAY (SCROLLABLE)
-  // -----------------------------
+ 
   function showAnswers() {
     answerPanel.style.display = "block";
     answerPanel.style.height = "550px";
-    answerPanel.style.alignItems = "center";
-    answerPanel.style.overflowY = "auto";   // ⭐ MAKE SCROLLABLE
+    answerPanel.style.overflowY = "auto";
 
     leftAnswers.innerHTML = "";
-    leftAnswers.style.textAlign = "left";
-    leftAnswers.style.fontSize = "20px";
-
     rightAnswers.innerHTML = "";
-    rightAnswers.style.textAlign = "left";
-    rightAnswers.style.fontSize = "20px";
 
-    activeQuestions.forEach((item, index) => {
+    activeQuestions.forEach((item, i) => {
       const li = document.createElement("li");
-
-      li.innerHTML = `<strong>${index + 1}. ${item.q}</strong><br>👉 ${item.a}<br><br>`;
-
-      if (index < 5) leftAnswers.appendChild(li);
-      else rightAnswers.appendChild(li);
+      li.innerHTML = `<strong>${i + 1}. ${item.q}</strong><br>👉 ${item.a}<br><br>`;
+      (i < 5 ? leftAnswers : rightAnswers).appendChild(li);
     });
 
-    const scoreInput = document.createElement("div");
-    scoreInput.innerHTML = `
-      <p id="sco">Enter number of correct answers:</p>
-      <input type="number" id="correctCount" min="0" max="${activeQuestions.length}"><br><br>
-      <button onclick="submitScore()" id="sub">Submit Score</button>
+    answerPanel.innerHTML += `
+      <p>Enter number of correct answers:</p>
+      <input type="number" id="correctCount" min="0" max="${activeQuestions.length}">
+      <br><br>
+      <button onclick="submitScore()">Submit Score</button>
     `;
-    answerPanel.appendChild(scoreInput);
   }
 
   window.submitScore = function () {
-    const correctCount = parseInt(document.getElementById("correctCount").value, 10) || 0;
-    const points = correctCount * 10;
-
-    answerPanel.style.display = "none";
+    const correct = parseInt(document.getElementById("correctCount").value) || 0;
+    const points = correct * 10;
 
     let data = JSON.parse(localStorage.getItem("houseScores")) || [
-      { id: "red", name: "RED", color: "red", score: 0 },
-      { id: "blue", name: "BLUE", color: "blue", score: 0 },
-      { id: "yellow", name: "YELLOW", color: "yellow", score: 0 },
-      { id: "green", name: "GREEN", color: "green", score: 0 }
+      { id: "red", score: 0 },
+      { id: "blue", score: 0 },
+      { id: "yellow", score: 0 },
+      { id: "green", score: 0 }
     ];
 
-    data = data.map(h => {
+    data.forEach(h => {
       if (h.id === selectedHouse) h.score += points;
-      return h;
     });
 
     localStorage.setItem("houseScores", JSON.stringify(data));
-    alert(`Added ${points} points to ${selectedHouse.toUpperCase()}!`);
+    alert(`✅ ${points} points added to ${selectedHouse.toUpperCase()}`);
   };
 
-  const startBtn = document.getElementById("startBtn");
-  startBtn.addEventListener("click", () => {
-    startBtn.style.display = "none";
-    startRound(questions1);
-  });
-
-  const startBtn1 = document.getElementById("startBtn1");
-  startBtn1.addEventListener("click", () => {
-    startBtn1.style.display = "none";
-    startRound(questions2);
-  });
-
-  const startBtn2 = document.getElementById("startBtn2");
-  startBtn2.addEventListener("click", () => {
-    startBtn2.style.display = "none";
-    startRound(questions3);
-  });
-
-  const startBtn3 = document.getElementById("startBtn3");
-  startBtn3.addEventListener("click", () => {
-    startBtn3.style.display = "none";
-    startRound(questions4);
-  });
+  // ----------------------------
+  // START BUTTONS
+  // ----------------------------
+  document.getElementById("startBtn").onclick = () => startRound(questions1);
+  document.getElementById("startBtn1").onclick = () => startRound(questions2);
+  document.getElementById("startBtn2").onclick = () => startRound(questions3);
+  document.getElementById("startBtn3").onclick = () => startRound(questions4);
 
 });

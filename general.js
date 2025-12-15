@@ -49,7 +49,7 @@ const stopBanner = document.getElementById("stop");
 const buzzer = document.getElementById("buzzer");
 const tickSound = document.getElementById("tickSound");
 const hurraySound = document.getElementById("hurraySound");
-const sadSound = document.getElementById("sadSound");
+
 
 // ===============================
 // HOUSE CHOOSER
@@ -58,6 +58,7 @@ let houseChooserContainer = leftContainer.querySelector(".house-chooser");
 if (!houseChooserContainer) {
   houseChooserContainer = document.createElement("div");
   houseChooserContainer.className = "house-chooser";
+  houseChooserContainer.style.fontSize = "30px"
   houseChooserContainer.style.marginTop = "12px";
   leftContainer.appendChild(houseChooserContainer);
 }
@@ -66,19 +67,22 @@ if (!houseChooserContainer) {
 // RIGHT UI ELEMENTS
 // ===============================
 const timerBox = document.createElement("div");
-timerBox.style.fontSize = "30px";
+timerBox.style.fontSize = "50px";
 timerBox.style.marginTop = "10px";
 timerBox.style.backgroundColor = "yellow";
 
 const correctBtn = document.createElement("button");
 correctBtn.textContent = "Correct";
-correctBtn.className = "extraBtn";
-correctBtn.style.margin = "10px";
+correctBtn.className = "extra";
+correctBtn.style.margin = "20px";
+correctBtn.style.fontSize = "40px";
+
 
 const wrongBtn = document.createElement("button");
 wrongBtn.textContent = "Wrong";
-wrongBtn.className = "extraBtn";
-wrongBtn.style.margin = "10px";
+wrongBtn.className = "extra";
+wrongBtn.style.margin = "20px";
+wrongBtn.style.fontSize = "40px";
 
 // ===============================
 // TIMER
@@ -128,6 +132,10 @@ function renderHouseChooser(title = "🏠 Choose a House:") {
     btn.textContent = house.name;
     btn.className = "color";
     btn.style.backgroundColor = house.color;
+     btn.style.height = "60px";
+     btn.style.width = "100px";
+     btn.style.fontSize = "20px";
+     btn.style.fontWeight = "bold";
     btn.style.color = "white";
     btn.style.margin = "4px";
     btn.onclick = () => {
@@ -151,8 +159,8 @@ function displayQuestionRight(time) {
   if (stopBanner) stopBanner.style.display = "none";
 
   rightContainer.innerHTML = `
-    <h3>🎯 Question for ${houses[currentHouseIndex].name} House</h3>
-    <p style="font-size:30px;">${questions[currentQuestion]}</p>
+    <h1>🎯 Question for ${houses[currentHouseIndex].name} House</h1>
+    <p style="font-size:60px;">${questions[currentQuestion]}</p>
   `;
 
   rightContainer.appendChild(correctBtn);
@@ -165,9 +173,7 @@ function displayQuestionRight(time) {
   startTimer(time);
 }
 
-// ===============================
-// BUTTON HANDLERS
-// ===============================
+
 function handleCorrect() {
   clearInterval(timerInterval);
   if (tickSound) { tickSound.pause(); tickSound.currentTime = 0; }
@@ -185,11 +191,11 @@ function handleCorrect() {
   localStorage.setItem("houseScores", JSON.stringify(updated));
 
   rightContainer.innerHTML = `
-    <h2>✅ Correct Answer:</h2>
-    <p style="font-size:30px;color:green;"><b>${answers[currentQuestion]}</b></p>
+    <h1>✅ Correct Answer:</h1>
+    <p style="font-size:70px;color:green;"><b>${answers[currentQuestion]}</b></p>
   `;
 
-  // 🔊 Play sound BEFORE alert
+ 
   if (hurraySound) { hurraySound.currentTime = 0; hurraySound.play(); }
   setTimeout(() => {
     alert(`${currentHouse.name} +${questionPassed ? 5 : 10} points`);
@@ -202,8 +208,8 @@ function handleWrong() {
   clearInterval(timerInterval);
   if (tickSound) { tickSound.pause(); tickSound.currentTime = 0; }
 
-  // 🔊 Play sound BEFORE alert
-  if (sadSound) { sadSound.currentTime = 0; sadSound.play(); }
+  
+
   setTimeout(() => {
     alert(`❌ ${houses[currentHouseIndex].name} got it wrong`);
     passQuestion();
@@ -237,7 +243,7 @@ function myFunction(n, btn) {
 }
 
 function handleTimeout() {
-  // 🔊 Play buzzer BEFORE alert
+  
   if (buzzer) { buzzer.currentTime = 0; buzzer.play(); }
   setTimeout(() => {
     alert(`⏰ Time's up for ${houses[currentHouseIndex].name}`);
@@ -266,9 +272,7 @@ function passQuestion() {
   renderHouseChooser("🏠 Choose next House:");
 }
 
-// ===============================
-// INIT
-// ===============================
+
 showIntroRight();
 function ensureHouseScores() {
   const existing = localStorage.getItem("houseScores");

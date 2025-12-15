@@ -35,6 +35,9 @@ let currentQuestionIndexSS = null;
 let selectedHouseSS = null;
 let currentModeSS = null;
 let passCountSS = 0;
+ const buzzer = document.getElementById("buzzer");
+  const tickSound = document.getElementById("tickSound");
+  const hurraySound = document.getElementById("hurraySound");
 
 
 const sightQuestions = [
@@ -181,10 +184,21 @@ function startTimerSS() {
   timerBoxSS.style.backgroundColor = "#ffe680";
   timerTextSS.textContent = `${timeLeftSS}s`;
 
+
   clearInterval(timerIntervalSS);
   timerIntervalSS = setInterval(() => {
     timeLeftSS--;
     timerTextSS.textContent = `${timeLeftSS}s`;
+ if (tickSound) {
+          tickSound.pause();
+          tickSound.currentTime = 0;
+        }
+
+        // 🔊 Buzzer BEFORE alert
+        if (buzzer) {
+          buzzer.currentTime = 0;
+          buzzer.play();
+        }
 
     if (timeLeftSS <= 5) timerBoxSS.style.backgroundColor = "#ff6868";
     else if (timeLeftSS <= 10) timerBoxSS.style.backgroundColor = "#ffd966";
@@ -224,12 +238,17 @@ function showAnswerButtonsSS() {
 
     showCorrectAnswerSS(true); 
     alert("✅ Correct! +10 points added to " + selectedHouseSS.toUpperCase() + " house.");
+    if (tickSound) { tickSound.pause(); tickSound.currentTime = 0; }
+      if (hurraySound) { hurraySound.currentTime = 0; hurraySound.play(); }
   };
 
   
   btnWrong.onclick = () => {
     alert("❌ Wrong! No points. Passing to next house.");
     handlePassSS();
+    if (tickSound) { tickSound.pause(); tickSound.currentTime = 0; }
+
+
   };
 
   

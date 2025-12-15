@@ -20,6 +20,9 @@ document.addEventListener("DOMContentLoaded", () => {
   const timerDisplay   = document.getElementById("timerDisplay");
   const scoringButtons = document.getElementById("scoringButtons");
   const generalImg     = document.getElementById("generalimg");
+  const buzzer = document.getElementById("buzzer");
+const tickSound = document.getElementById("tickSound");
+const hurraySound = document.getElementById("hurraySound");
 
  
   function getScores() {

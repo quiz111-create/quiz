@@ -1,4 +1,7 @@
-let timerInterval;
+// ===============================
+// GLOBAL STATE
+// ===============================
+let timerInterval = null;
 let timeLeft = 30;
 let currentQuestionIndex = null;
 let selectedHouse = null;
@@ -7,6 +10,16 @@ let passIndex = 0;
 
 const houses = ["red", "blue", "yellow", "green"];
 
+// ===============================
+// SOUNDS
+// ===============================
+const buzzer = document.getElementById("buzzer");
+const tickSound = document.getElementById("tickSound");
+const hurraySound = document.getElementById("hurraySound");
+
+// ===============================
+// QUESTIONS
+// ===============================
 const questions = [
   { q: "What is your name?", a: "Your actual name" },
   { q: "Where do you live?", a: "Your location" },
@@ -14,24 +27,19 @@ const questions = [
   { q: "What is your favorite color?", a: "Any color" },
   { q: "Who is the CEO of Google?", a: "Sundar Pichai" },
   { q: "What is your hobby?", a: "Your hobby" },
-  { q: "Which country do you like?", a: "Any country" },
-  { q: "What is 10 + 5?", a: "15" },
-  { q: "What is your dream job?", a: "Your dream job" },
-  { q: "Which language do you speak?", a: "Your language" },
-  { q: "What is your favorite food?", a: "Your favorite food" },
-  { q: "What is the capital of India?", a: "New Delhi" },
-  { q: "What year is it?", a: "2025" },
-  { q: "What is your favorite movie?", a: "Your favorite movie" },
   { q: "What is your age?", a: "Your age" },
-  { q: "What is your favorite sport?", a: "Your favorite sport" }
+  { q: "What is your dream job?", a: "Your dream job" }
 ];
 
+// ===============================
+// SCORE STORAGE
+// ===============================
 function getScores() {
   return JSON.parse(localStorage.getItem("houseScores")) || [
-    { id: "red", name: "RED", score: 0 },
-    { id: "blue", name: "BLUE", score: 0 },
-    { id: "yellow", name: "YELLOW", score: 0 },
-    { id: "green", name: "GREEN", score: 0 }
+    { id: "red", score: 0 },
+    { id: "blue", score: 0 },
+    { id: "yellow", score: 0 },
+    { id: "green", score: 0 }
   ];
 }
 
@@ -46,17 +54,31 @@ function updateScore(houseId, delta) {
   saveScores(data);
 }
 
+// ===============================
+// DOM ELEMENTS
+// ===============================
 const buttonContainer = document.getElementById("buttonss");
 const houseSelect = document.getElementById("houseSelect");
 const questionBox = document.getElementById("questionBox");
+const timerBox = document.getElementById("timerBox");
+const timerText = document.getElementById("timerText");
 
+// ===============================
+// SHOW QUESTION NUMBERS
+// ===============================
 function showQuestion2() {
   buttonContainer.style.display = "inline-block";
   document.getElementById("showQn").style.display = "none";
-  document.querySelectorAll("#buttonss button").forEach(b => b.style.display = "inline-block");
+  document.querySelectorAll("#buttonss button").forEach(b => {
+    b.style.display = "inline-block";
+  });
 }
+
 document.getElementById("showQn").addEventListener("click", showQuestion2);
 
+// ===============================
+// CREATE QUESTION BUTTONS
+// ===============================
 questions.forEach((q, i) => {
   const btn = document.createElement("button");
   btn.textContent = i + 1;
@@ -66,66 +88,110 @@ questions.forEach((q, i) => {
 
   btn.onclick = function () {
     currentQuestionIndex = i;
-    passList = [];
     passIndex = 0;
+    selectedHouse = null;
+
     clearInterval(timerInterval);
     this.remove();
+
     houseSelect.style.display = "block";
+    questionBox.style.display = "none";
   };
+
   buttonContainer.appendChild(btn);
 });
 
+// ===============================
+// HOUSE SELECTION
+// ===============================
 document.querySelectorAll("#houseSelect button").forEach(btn => {
   btn.addEventListener("click", () => {
     selectedHouse = btn.id;
     houseSelect.style.display = "none";
-    questionBox.style.display = "block";
 
-    // Reset question UI
-    questionBox.innerHTML = `<div><h2>${questions[currentQuestionIndex].q}</h2></div>`;
+    questionBox.style.display = "block";
+    questionBox.innerHTML = `<h2>${questions[currentQuestionIndex].q}</h2>`;
+
     showAnswerButtons();
 
-    // Timer logic: 30s first attempt, 10s after passes
-    timeLeft = passIndex === 0 ? 30 : 10;
-    startTimer();
+    // ⏱ timer duration based on pass
+    if (passIndex === 0) timeLeft = 30;
+    else if (passIndex === 1) timeLeft = 15;
+    else timeLeft = 10;
 
-    // Track which houses are still available
-    passList = houses.filter(h => h !== selectedHouse);
+    startTimer();
   });
 });
 
-function showQuestion() {
-  questionBox.innerHTML = `<div><h2>${questions[currentQuestionIndex].q}</h2></div>`;
-}
-
+// ===============================
+// TIMER (FIXED)
+// ===============================
 function startTimer() {
-  const timerText = document.getElementById("timerText");
-  const timerBox = document.getElementById("timerBox");
-  timerBox.style.display = "inline-block";
-  timerBox.style.backgroundColor = "#ffe680";
   clearInterval(timerInterval);
 
-  timerText.textContent = timeLeft + "s";
+  timerBox.style.display = "inline-block";
+  timerBox.style.backgroundColor = "#ffe680";
+  timerText.textContent = `⏳ ${timeLeft}s`;
 
   timerInterval = setInterval(() => {
     timeLeft--;
-    timerText.textContent = timeLeft + "s";
+    timerText.textContent = `⏳ ${timeLeft}s`;
+
+    if (tickSound && timeLeft > 0) {
+      tickSound.currentTime = 0;
+      tickSound.play();
+    }
+
     if (timeLeft <= 5) timerBox.style.backgroundColor = "#ff6868";
     else if (timeLeft <= 10) timerBox.style.backgroundColor = "#ffd966";
 
     if (timeLeft <= 0) {
       clearInterval(timerInterval);
-      wrongPressed();
+
+      if (tickSound) {
+        tickSound.pause();
+        tickSound.currentTime = 0;
+      }
+
+      if (buzzer) {
+        buzzer.currentTime = 0;
+        buzzer.play();
+      }
+
+      handleTimeout();
     }
   }, 1000);
 }
 
+// ===============================
+// TIMEOUT LOGIC
+// ===============================
+function handleTimeout() {
+  disableButtons();
+
+  if (passIndex >= 2) {
+    alert("⏰ All houses failed!");
+    showCorrectAnswer();
+    return;
+  }
+
+  passIndex++;
+  alert("⏰ Time up! Passing question.");
+
+  houseSelect.style.display = "block";
+  questionBox.style.display = "none";
+}
+
+// ===============================
+// ANSWER BUTTONS
+// ===============================
 function showAnswerButtons() {
   const c = document.createElement("button");
   const w = document.createElement("button");
 
   c.textContent = "Correct";
   w.textContent = "Wrong";
+
   c.className = "quiz-btn";
   w.className = "quiz-btn";
 
@@ -137,48 +203,79 @@ function showAnswerButtons() {
   questionBox.appendChild(w);
 }
 
+// ===============================
+// CORRECT
+// ===============================
 function correctPressed() {
   clearInterval(timerInterval);
-  if (passIndex === 0) updateScore(selectedHouse, 10);
-  else updateScore(selectedHouse, 5);
+
+  if (tickSound) {
+    tickSound.pause();
+    tickSound.currentTime = 0;
+  }
+
+  if (hurraySound) {
+    hurraySound.currentTime = 0;
+    hurraySound.play();
+  }
+
+  updateScore(selectedHouse, passIndex === 0 ? 10 : 5);
   disableButtons();
   showCorrectAnswer();
-  alert(passIndex === 0 ? "Correct! +10 points" : "Correct! +5 points");
+
+  alert(passIndex === 0 ? "✅ Correct! +10 points" : "✅ Correct! +5 points");
 }
 
+// ===============================
+// WRONG
+// ===============================
 function wrongPressed() {
   clearInterval(timerInterval);
+
+  if (tickSound) {
+    tickSound.pause();
+    tickSound.currentTime = 0;
+  }
+
   disableButtons();
 
-  if (passIndex >= 3) {
-    alert("All houses failed. Showing answer.");
+  if (passIndex >= 2) {
+    alert("❌ All houses failed!");
     showCorrectAnswer();
     return;
   }
 
   passIndex++;
-  alert("Choose a house to pass the question.");
+  alert("❌ Wrong! Passing question.");
 
-  // Show house selection again
   houseSelect.style.display = "block";
-  questionBox.style.display = "none"; // hide question until house is chosen
+  questionBox.style.display = "none";
 }
 
+// ===============================
+// HELPERS
+// ===============================
 function disableButtons() {
-  document.querySelectorAll("#questionBox button").forEach(b => b.disabled = true);
+  document.querySelectorAll("#questionBox button").forEach(b => {
+    b.disabled = true;
+  });
 }
 
 function showCorrectAnswer() {
   if (document.getElementById("correctAnswerText")) return;
+
+  timerBox.style.display = "none";
+
   const p = document.createElement("p");
   p.id = "correctAnswerText";
   p.style.color = "green";
   p.style.fontWeight = "bold";
   p.style.fontSize = "25px";
-  timerBox.style.display = "none";
   p.textContent = "Answer: " + questions[currentQuestionIndex].a;
+
   questionBox.appendChild(p);
 }
+
 
 document.getElementById("dsply").addEventListener("click", () => {
   if (currentQuestionIndex !== null) showCorrectAnswer();

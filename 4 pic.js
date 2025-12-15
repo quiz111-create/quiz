@@ -2,6 +2,10 @@ let timerInterval;
 let timeLeft = 30;
 let currentQuestionIndex = null;
 let selectedHouse = null;
+const buzzer = document.getElementById("buzzer");
+const tickSound = document.getElementById("tickSound");
+const hurraySound = document.getElementById("hurraySound");
+
 
 // Questions (only first 6 will be used)
 const questions = [
@@ -67,7 +71,7 @@ btn.onclick = function () {
 
   // ✅ Show house selection first
   houseSelect.style.display = "block";
-  questionBox.style.display = "none"; // hide question until house is picked
+  questionBox.style.display = "none"; 
 };
   buttonContainer.appendChild(btn);
 });
@@ -102,7 +106,12 @@ document.querySelectorAll("#houseSelect button").forEach(btn => {
 function startTimer() {
   const timerText = document.getElementById("timerText");
   const timerBox = document.getElementById("timerBox");
+ if (tickSound) {
+          tickSound.play();
+          tickSound.currentTime = 0;
+        }
 
+        // 🔊 Buzzer BEFORE aler
   timerBox.style.display = "inline-block";
   timerBox.style.backgroundColor = "#ffe680";
 
@@ -114,6 +123,7 @@ function startTimer() {
     else if (timeLeft <= 10) timerBox.style.backgroundColor = "#ffd966";
 
     if (timeLeft <= 0) {
+      buzzer.play();
       clearInterval(timerInterval);
       alert("⏰ Time up!");
       disableAnswerButtons();
@@ -135,6 +145,7 @@ function showAnswerButtons() {
 
   btnCorrect.onclick = () => {
     if (selectedHouse) {
+      hurraySound.play();
       updateScore(selectedHouse, 10); // give selected house 10 points
     }
     disableAnswerButtons();
