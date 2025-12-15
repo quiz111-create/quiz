@@ -167,7 +167,7 @@ document.addEventListener("DOMContentLoaded", () => {
     answerText.style.fontWeight = "bold";
 
     setScoringButtonsEnabled(false);
-    setTimeout(resetQuestionUI, 6000);
+    setTimeout(resetQuestionUI, 60000);
   }
 
   function handleWrong() {
@@ -182,7 +182,7 @@ document.addEventListener("DOMContentLoaded", () => {
     answerText.style.fontWeight = "bold";
 
     setScoringButtonsEnabled(false);
-    setTimeout(resetQuestionUI, 6000);
+    setTimeout(resetQuestionUI, 60000);
   }
 
   // ===============================
@@ -215,4 +215,5 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
 });
+
 
