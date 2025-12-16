@@ -27,16 +27,12 @@ document.addEventListener("DOMContentLoaded", () => {
   const scoringButtons = document.getElementById("scoringButtons");
   const generalImg     = document.getElementById("generalimg");
 
-  // ===============================
-  // SOUNDS
-  // ===============================
+  
   const buzzer      = document.getElementById("buzzer");      // <audio id="buzzer" src="buzzer.mp3" preload="auto"></audio>
   const tickSound   = document.getElementById("tickSound");   // <audio id="tickSound" src="tick.mp3" preload="auto"></audio>
   const hurraySound = document.getElementById("hurraySound"); // <audio id="hurraySound" src="hurray.mp3" preload="auto"></audio>
 
-  // ===============================
-  // SCORE STORAGE
-  // ===============================
+ 
   function getScores() {
     return JSON.parse(localStorage.getItem("houseScores")) || [
       { id: "red", score: 0 },
@@ -60,9 +56,7 @@ document.addEventListener("DOMContentLoaded", () => {
     saveScores(data);
   }
 
-  // ===============================
-  // SHOW QUESTION BUTTONS
-  // ===============================
+ 
   document.getElementById("showQn").addEventListener("click", () => {
     document.getElementById("showQn").style.display = "none";
     document.querySelectorAll(".startBtn").forEach(btn => {
@@ -70,9 +64,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 
-  // ===============================
-  // START QUESTION SET
-  // ===============================
+  
   document.querySelectorAll(".startBtn").forEach(btn => {
     btn.addEventListener("click", () => {
       const setId = btn.getAttribute("data-set");
@@ -89,9 +81,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 
-  // ===============================
-  // HOUSE SELECTION
-  // ===============================
+  
   ["red", "blue", "yellow", "green"].forEach(house => {
     document.getElementById(house).addEventListener("click", () => chooseHouse(house));
   });
@@ -103,9 +93,7 @@ document.addEventListener("DOMContentLoaded", () => {
     startTimer();
   }
 
-  // ===============================
-  // TIMER WITH SOUND
-  // ===============================
+  
   function startTimer() {
     clearInterval(timerInterval);
     timeLeft = 30;
@@ -114,7 +102,7 @@ document.addEventListener("DOMContentLoaded", () => {
     timerDisplay.style.backgroundColor = "#ffe680";
     timerDisplay.style.fontSize = "35px";
 
-    // stop old sounds
+   
     stopAllSounds();
 
     timerInterval = setInterval(() => {
@@ -143,9 +131,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }, 1000);
   }
 
-  // ===============================
-  // BUTTON EVENTS
-  // ===============================
+  
   document.getElementById("btnCorrect").addEventListener("click", handleCorrect);
   document.getElementById("btnWrong").addEventListener("click", handleWrong);
 
@@ -166,6 +152,8 @@ document.addEventListener("DOMContentLoaded", () => {
     answerText.style.fontSize = "30px";
     answerText.style.fontWeight = "bold";
 
+    setScoringButtonsEnabled(false);
+    setTimeout(resetQuestionUI, 60000);
   }
 
   function handleWrong() {
@@ -179,11 +167,11 @@ document.addEventListener("DOMContentLoaded", () => {
     answerText.style.fontSize = "30px";
     answerText.style.fontWeight = "bold";
 
+    setScoringButtonsEnabled(false);
+    setTimeout(resetQuestionUI, 60000);
   }
 
-  // ===============================
-  // HELPERS
-  // ===============================
+ 
   function resetQuestionUI() {
     clearInterval(timerInterval);
     stopAllSounds();
@@ -211,6 +199,3 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
 });
-
-
-

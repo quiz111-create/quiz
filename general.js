@@ -206,8 +206,6 @@ function handleCorrect() {
 
 function handleWrong() {
   clearInterval(timerInterval);
-  if (tickSound) { tickSound.pause(); tickSound.currentTime = 0; }
-
   
 
   setTimeout(() => {
