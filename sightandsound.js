@@ -1,4 +1,6 @@
-
+// ===============================
+// SHOW / HIDE MODE BUTTONS
+// ===============================
 function Sight() {
   document.querySelectorAll('.sight').forEach(btn => btn.style.display = 'inline-block');
   document.getElementById('sight').style.display = 'none';
@@ -28,18 +30,23 @@ function showSightSound() {
   document.getElementById('showSightSound').style.display = 'none';
 }
 
-
+// ===============================
+// GLOBAL VARIABLES
+// ===============================
 let timerIntervalSS;
 let timeLeftSS = 30;
 let currentQuestionIndexSS = null;
 let selectedHouseSS = null;
 let currentModeSS = null;
 let passCountSS = 0;
- const buzzer = document.getElementById("buzzer");
-  const tickSound = document.getElementById("tickSound");
-  const hurraySound = document.getElementById("hurraySound");
 
+const buzzer = document.getElementById("buzzer");
+const tickSound = document.getElementById("tickSound");
+const hurraySound = document.getElementById("hurraySound");
 
+// ===============================
+// QUESTIONS
+// ===============================
 const sightQuestions = [
   { q: "What is shown in the image?", a: "Mount Everest", img: "https://tse4.mm.bing.net/th/id/OIF.glHbjpPHyrqeP1YjaosQfQ?rs=1&pid=ImgDetMain&o=7&rm=3" },
   { q: "Identify the monument.", a: "Taj Mahal", video: "https://www.w3schools.com/html/mov_bbb.mp4" },
@@ -56,7 +63,9 @@ const soundQuestions = [
   { q: "Which language is spoken?", a: "English", audio: "https://www2.cs.uic.edu/~i101/SoundFiles/gettysburg.wav" }
 ];
 
-
+// ===============================
+// SCORE HANDLING
+// ===============================
 function getScoresSS() {
   return JSON.parse(localStorage.getItem("houseScores")) || [
     { id: "red", name: "RED", score: 0 },
@@ -74,64 +83,59 @@ function updateScoreSS(houseId, delta) {
   const data = getScoresSS();
   const house = data.find(h => h.id === houseId);
   if (house) {
-    house.score += delta;
-    if (house.score < 0) house.score = 0;
+    house.score = Math.max(0, house.score + delta);
   }
   saveScoresSS(data);
 }
 
-
+// ===============================
+// DOM ELEMENTS
+// ===============================
 const questionBoxSS = document.getElementById("questionBoxSS");
 const houseSelectSS = document.getElementById("houseSelectSS");
 const answerTextSS = document.getElementById("answerText");
 const timerTextSS = document.getElementById("timerTextSS");
 const timerBoxSS = document.getElementById("timerBoxSS");
 
-
+// ===============================
+// UTILITIES
+// ===============================
 function clearQuestionAreaSS() {
-  clearInterval(timerIntervalSS);
+  clearInterval(timerIntervalSS);              // 🔧 FIX: stop timer immediately
   questionBoxSS.innerHTML = "";
   questionBoxSS.style.display = "none";
   answerTextSS.textContent = "";
-  document.getElementById("generalimg").style.display = "block";
   timerBoxSS.style.display = "none";
+  document.getElementById("generalimg").style.display = "block";
 }
 
-
 function getCurrentQuestionSS() {
-  return currentModeSS === "sight" ? sightQuestions[currentQuestionIndexSS] : soundQuestions[currentQuestionIndexSS];
+  return currentModeSS === "sight"
+    ? sightQuestions[currentQuestionIndexSS]
+    : soundQuestions[currentQuestionIndexSS];
 }
 
 
 function myfunction(event) {
   const btn = event.target;
   const number = parseInt(btn.textContent.trim(), 10);
-  if (btn.classList.contains("sight")) {
-    currentModeSS = "sight";
-  } else if (btn.classList.contains("sound")) {
-    currentModeSS = "sound";
-  } else {
-    return;
-  }
 
+  currentModeSS = btn.classList.contains("sight") ? "sight" : "sound";
   currentQuestionIndexSS = number - 1;
+
   passCountSS = 0;
   timeLeftSS = 30;
   selectedHouseSS = null;
 
   clearQuestionAreaSS();
 
-  
-  answerTextSS.style.fontSize = "20px";
-  answerTextSS.style.fontWeight = "normal";
-  answerTextSS.style.color = "inherit";
-
-  
   btn.style.display = "none";
-
   houseSelectSS.style.display = "block";
 }
 
+// ===============================
+// HOUSE SELECTION (TIMER STARTS HERE ONLY)
+// ===============================
 document.querySelectorAll("#houseSelectSS button").forEach(houseBtn => {
   houseBtn.addEventListener("click", () => {
     selectedHouseSS = houseBtn.id;
@@ -142,190 +146,107 @@ document.querySelectorAll("#houseSelectSS button").forEach(houseBtn => {
     questionBoxSS.innerHTML = `<div>${q.q}</div>`;
     questionBoxSS.style.display = "block";
 
-  
     if (q.img) {
-      const imgEl = document.createElement("img");
-      imgEl.src = q.img;
-      imgEl.style.cssText = "height:200px; width:300px; margin-top:10px; cursor:pointer; display:block; margin-left:auto; margin-right:auto;";
-      questionBoxSS.appendChild(imgEl);
-      imgEl.addEventListener("click", () => {
-        document.getElementById("modalImg").src = q.img;
-        document.getElementById("imgModal").style.display = "block";
-      });
-    }
-    if (q.video) {
-      const videoEl = document.createElement("video");
-      videoEl.src = q.video;
-      videoEl.controls = true;
-      videoEl.style.cssText = "width:300px; height:200px; margin-top:10px; display:block; margin-left:auto; margin-right:auto;";
-      questionBoxSS.appendChild(videoEl);
-    }
-    if (q.audio) {
-      const audioEl = document.createElement("audio");
-      audioEl.src = q.audio;
-      audioEl.controls = true;
-      audioEl.style.cssText = "width:70%; margin-top:10px; display:block; margin-left:auto; margin-right:auto;";
-      questionBoxSS.appendChild(audioEl);
+      const img = document.createElement("img");
+      img.src = q.img;
+      img.style.cssText = "width:300px; height:200px; display:block; margin:auto;";
+      questionBoxSS.appendChild(img);
     }
 
-    startTimerSS();
+    if (q.video) {
+      const video = document.createElement("video");
+      video.src = q.video;
+      video.controls = true;
+      video.style.cssText = "width:300px; display:block; margin:auto;";
+      questionBoxSS.appendChild(video);
+    }
+
+    if (q.audio) {
+      const audio = document.createElement("audio");
+      audio.src = q.audio;
+      audio.controls = true;
+      audio.style.cssText = "width:70%; display:block; margin:auto;";
+      questionBoxSS.appendChild(audio);
+    }
+           // 🔧 FIX: timer starts ONLY after house selection
     showAnswerButtonsSS();
   });
 });
 
-
-document.getElementById("closeModal").addEventListener("click", () => {
-  document.getElementById("imgModal").style.display = "none";
-});
-
-
+// ===============================
+// TIMER
+// ===============================
 function startTimerSS() {
+  clearInterval(timerIntervalSS);               // 🔧 FIX: prevent multiple timers
   timerBoxSS.style.display = "inline-block";
-  timerBoxSS.style.backgroundColor = "#ffe680";
   timerTextSS.textContent = `${timeLeftSS}s`;
 
-
-  clearInterval(timerIntervalSS);
   timerIntervalSS = setInterval(() => {
     timeLeftSS--;
     timerTextSS.textContent = `${timeLeftSS}s`;
- if (tickSound) {
-          tickSound.pause();
-          tickSound.currentTime = 0;
-        }
 
-        // 🔊 Buzzer BEFORE alert
-        if (buzzer) {
-          buzzer.currentTime = 0;
-          buzzer.play();
-        }
-
-    if (timeLeftSS <= 5) timerBoxSS.style.backgroundColor = "#ff6868";
-    else if (timeLeftSS <= 10) timerBoxSS.style.backgroundColor = "#ffd966";
+    if (tickSound) {
+      tickSound.currentTime = 0;
+      tickSound.play();
+    }
 
     if (timeLeftSS <= 0) {
       clearInterval(timerIntervalSS);
-      alert("⏰ Time up!");
       timerBoxSS.style.display = "none";
+      if (buzzer) buzzer.play();
+      alert("⏰ Time up!");
     }
   }, 1000);
 }
 
-function showAnswerButtonsSS() {
-  
-  questionBoxSS.querySelectorAll(".quiz-btn").forEach(b => b.remove());
 
+function showAnswerButtonsSS() {
   const btnCorrect = document.createElement("button");
   const btnWrong = document.createElement("button");
-  const btnPass = document.createElement("button");
+  const btnStart = document.createElement("button");
 
   btnCorrect.textContent = "Correct";
   btnWrong.textContent = "Wrong";
-  btnPass.textContent = "Pass";
-
-  btnCorrect.className = "quiz-btn";
-  btnWrong.className = "quiz-btn";
-  btnPass.className = "quiz-btn";
-
+  btnStart.textContent = "Start Timer";
+  btnCorrect.className = "btns";
+  btnWrong.className = "btns";
+  btnStart.className = "btns";
   btnCorrect.onclick = () => {
-    if (selectedHouseSS) {
-      updateScoreSS(selectedHouseSS, 10);
-    }
-    disableAnswerButtonsSS();
-
+    updateScoreSS(selectedHouseSS, 10);
     clearInterval(timerIntervalSS);
-    timerBoxSS.style.display = "none";
-
-    showCorrectAnswerSS(true); 
-    alert("✅ Correct! +10 points added to " + selectedHouseSS.toUpperCase() + " house.");
-    if (tickSound) { tickSound.pause(); tickSound.currentTime = 0; }
-      if (hurraySound) { hurraySound.currentTime = 0; hurraySound.play(); }
+    showCorrectAnswerSS(true);
+    if (hurraySound) hurraySound.play();
   };
+  btnStart.onclick = startTimerSS;
+  btnWrong.onclick = handlePassSS;
 
-  
-  btnWrong.onclick = () => {
-    alert("❌ Wrong! No points. Passing to next house.");
-    handlePassSS();
-    if (tickSound) { tickSound.pause(); tickSound.currentTime = 0; }
-
-
-  };
-
-  
-  btnPass.onclick = () => {
-    handlePassSS();
-  };
-
-  
-  questionBoxSS.appendChild(document.createElement("br"));
-  questionBoxSS.appendChild(btnCorrect);
-  questionBoxSS.appendChild(btnWrong);
-  questionBoxSS.appendChild(btnPass);
-}
-
-function disableAnswerButtonsSS() {
-  questionBoxSS.querySelectorAll("button.quiz-btn").forEach(btn => {
-    btn.disabled = true;
-  });
+  questionBoxSS.append(btnCorrect, btnWrong, btnStart);
 }
 
 
 function handlePassSS() {
   passCountSS++;
-  clearInterval(timerIntervalSS);
-  disableAnswerButtonsSS();
 
- 
-  if (passCountSS >= 4) {
-    alert("➡️ Passed/Wrong 4 times! Timer hidden, showing enlarged answer.");
-    showCorrectAnswerSS(true); 
-    timerBoxSS.style.display = "none";
-    return;
-  }
-
- 
-  if (passCountSS === 3) {
-    timeLeftSS = 10;
-    alert("➡️ Passed/Wrong to audience. Choose a house, 10s timer will run then answer revealed.");
-
-   
-    houseSelectSS.style.display = "block";
-
-   
-    startTimerSS();
-    return;
-  }
-
-  
-  if (passCountSS === 1) timeLeftSS = 15;
-  else if (passCountSS === 2) timeLeftSS = 10;
-
-  
-  const q = getCurrentQuestionSS();
-  questionBoxSS.innerHTML = `<div>${q.q}</div>`;
-  answerTextSS.textContent = "";
-  document.getElementById("generalimg").style.display = "none";
-
-
-  houseSelectSS.style.display = "block";
-
-  alert(`➡️ Passed/Wrong! Choose the next house. Time: ${timeLeftSS}s`);
-
- 
+  clearInterval(timerIntervalSS);                // 🔧 FIX: stop timer on pass
   timerBoxSS.style.display = "none";
+
+  if (passCountSS >= 4) {
+    showCorrectAnswerSS(true);
+    if (buzzer) buzzer.play();
+    return;
+  }
+
+  timeLeftSS = passCountSS === 1 ? 15 : 10;
+  houseSelectSS.style.display = "block";         // 🔧 FIX: waiting for house
 }
 
-function showCorrectAnswerSS(enlarge = false) {
+// ===============================
+// SHOW ANSWER
+// ===============================
+function showCorrectAnswerSS() {
   const q = getCurrentQuestionSS();
   answerTextSS.textContent = "Answer: " + q.a;
-
-  if (enlarge) {
-    answerTextSS.style.fontSize = "40px"; 
-    answerTextSS.style.fontWeight = "bold";
-    answerTextSS.style.color = "lightgreen";  
-  } else {
-    answerTextSS.style.fontSize = "40px";   
-    answerTextSS.style.fontWeight = "bold";
-    answerTextSS.style.color="lightgreen";
-  }
+  answerTextSS.style.fontSize = "40px";
+  answerTextSS.style.fontWeight = "bold";
+  answerTextSS.style.color = "lightgreen";
 }

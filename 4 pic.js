@@ -61,7 +61,7 @@ function showQuestion2() {
     btn.style.display = "inline-block";
   });
 }
-
+questionBox.style.fontSize = "55px";
 // ===============================
 // CREATE QUESTION BUTTONS
 // ===============================
@@ -94,7 +94,7 @@ document.querySelectorAll("#houseSelect button").forEach(btn => {
     houseSelect.style.display = "none";
 
     const q = questions[currentQuestionIndex];
-    questionBox.innerHTML = `<h2>${q.q}</h2>`;
+    questionBox.innerHTML = `<div>${q.q}</div>`;
     document.getElementById("generalimg").style.display = "none";
 
     const img = document.createElement("img");
@@ -155,7 +155,7 @@ function showAnswerButtons() {
 
   btnCorrect.textContent = "Correct";
   btnWrong.textContent = "Wrong";
-  btnCorrect.className = btnWrong.className = "quiz-btn";
+  btnCorrect.className = btnWrong.className = "btns";
 
 btnCorrect.onclick = () => {
   clearInterval(timerInterval);  
@@ -202,7 +202,7 @@ function showCorrectAnswer() {
   const p = document.createElement("p");
   p.id = "correctAnswerText";
   p.style.color = "green";
-  p.style.fontSize = "25px";
+  p.style.fontSize = "40px";
   p.style.fontWeight = "bold";
   p.textContent = "Answer: " + questions[currentQuestionIndex].a;
 

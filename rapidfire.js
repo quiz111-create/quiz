@@ -78,7 +78,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const buzzer = document.getElementById("buzzer");
   const tickSound = document.getElementById("tickSound");
-  const hurraySound = document.getElementById("hurraySound");
 
   // ----------------------------
   // TIMER (FIXED TICK SOUND)
@@ -94,7 +93,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     timerDisplay.textContent = `${timeLeft}s`;
     timerDisplay.style.background = "#ffe680";
-    timerDisplay.style.fontSize = "28px";
+    timerDisplay.style.fontSize = "40px";
     timerDisplay.style.fontWeight = "bold";
     timerDisplay.style.textAlign = "center";
 
@@ -170,23 +169,24 @@ document.addEventListener("DOMContentLoaded", () => {
  
   function showAnswers() {
     answerPanel.style.display = "block";
-    answerPanel.style.height = "550px";
+    answerPanel.style.height = "700px";
     answerPanel.style.overflowY = "auto";
+    answerPanel.style.fontWeight = "bold";
 
     leftAnswers.innerHTML = "";
     rightAnswers.innerHTML = "";
 
     activeQuestions.forEach((item, i) => {
       const li = document.createElement("li");
-      li.innerHTML = `<strong>${i + 1}. ${item.q}</strong><br>👉 ${item.a}<br><br>`;
+      li.innerHTML = `<p style="font-size:30px;"><strong>${i + 1}. ${item.q}</strong><br>👉 ${item.a}<p><br><br>`;
       (i < 5 ? leftAnswers : rightAnswers).appendChild(li);
     });
 
     answerPanel.innerHTML += `
-      <p>Enter number of correct answers:</p>
+      <p style="font-size:30px">Enter number of correct answers:</p>
       <input type="number" id="correctCount" min="0" max="${activeQuestions.length}">
       <br><br>
-      <button onclick="submitScore()">Submit Score</button>
+      <button id="subs" onclick="submitScore()">Submit Score</button>
     `;
   }
 
@@ -212,9 +212,14 @@ document.addEventListener("DOMContentLoaded", () => {
   // ----------------------------
   // START BUTTONS
   // ----------------------------
-  document.getElementById("startBtn").onclick = () => startRound(questions1);
-  document.getElementById("startBtn1").onclick = () => startRound(questions2);
-  document.getElementById("startBtn2").onclick = () => startRound(questions3);
-  document.getElementById("startBtn3").onclick = () => startRound(questions4);
+ document.getElementById("startBtn").onclick = () => {
+    startRound(questions1);
+   startBtn.style.display="none";}
+  document.getElementById("startBtn1").onclick = () => {startRound(questions2);
+   startBtn1.style.display="none";}
+  document.getElementById("startBtn2").onclick = () =>{ startRound(questions3)
+   startBtn2.style.display="none";};
+  document.getElementById("startBtn3").onclick = () =>{ startRound(questions4)
+   startBtn3.style.display="none";};
 
 });

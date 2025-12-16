@@ -12,6 +12,7 @@ document.addEventListener("DOMContentLoaded", () => {
   };
 
   let activeQuestions = [];
+  let currentIndex = 0;
   let selectedHouse = null;
   let timerInterval = null;
   let timeLeft = 30;
@@ -27,12 +28,13 @@ document.addEventListener("DOMContentLoaded", () => {
   const scoringButtons = document.getElementById("scoringButtons");
   const generalImg     = document.getElementById("generalimg");
 
-  
-  const buzzer      = document.getElementById("buzzer");      // <audio id="buzzer" src="buzzer.mp3" preload="auto"></audio>
-  const tickSound   = document.getElementById("tickSound");   // <audio id="tickSound" src="tick.mp3" preload="auto"></audio>
-  const hurraySound = document.getElementById("hurraySound"); // <audio id="hurraySound" src="hurray.mp3" preload="auto"></audio>
+  const buzzer      = document.getElementById("buzzer");
+  const tickSound   = document.getElementById("tickSound");
+  const hurraySound = document.getElementById("hurraySound");
 
- 
+  // ===============================
+  // SCORE FUNCTIONS
+  // ===============================
   function getScores() {
     return JSON.parse(localStorage.getItem("houseScores")) || [
       { id: "red", score: 0 },
@@ -56,7 +58,9 @@ document.addEventListener("DOMContentLoaded", () => {
     saveScores(data);
   }
 
- 
+  // ===============================
+  // SHOW QUESTIONS
+  // ===============================
   document.getElementById("showQn").addEventListener("click", () => {
     document.getElementById("showQn").style.display = "none";
     document.querySelectorAll(".startBtn").forEach(btn => {
@@ -64,24 +68,32 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 
-  
   document.querySelectorAll(".startBtn").forEach(btn => {
     btn.addEventListener("click", () => {
       const setId = btn.getAttribute("data-set");
       activeQuestions = questionSets[setId];
+      currentIndex = 0;
       btn.style.display = "none";
 
       generalImg.style.display = "none";
       questionBox.style.display = "block";
-      questionText.textContent = activeQuestions[0].q;
-      questionText.style.fontSize = "40px";
-      answerText.textContent = "";
+      showQuestion();
 
       houseSelect.style.display = "block";
     });
   });
 
-  
+  function showQuestion() {
+    if (activeQuestions[currentIndex]) {
+      questionText.textContent = activeQuestions[currentIndex].q;
+      questionText.style.fontSize = "55px";
+      answerText.textContent = "";
+    }
+  }
+
+  // ===============================
+  // HOUSE SELECTION
+  // ===============================
   ["red", "blue", "yellow", "green"].forEach(house => {
     document.getElementById(house).addEventListener("click", () => chooseHouse(house));
   });
@@ -93,85 +105,109 @@ document.addEventListener("DOMContentLoaded", () => {
     startTimer();
   }
 
-  
+  // ===============================
+  // TIMER
+  // ===============================
   function startTimer() {
     clearInterval(timerInterval);
     timeLeft = 30;
 
     timerDisplay.textContent = timeLeft + "s";
     timerDisplay.style.backgroundColor = "#ffe680";
-    timerDisplay.style.fontSize = "35px";
+    timerDisplay.style.fontSize = "50px";
 
-   
     stopAllSounds();
 
     timerInterval = setInterval(() => {
       timeLeft--;
       timerDisplay.textContent = timeLeft + "s";
 
-      // 🔊 Play tick every second
       if (tickSound && timeLeft > 0) {
-        tickSound.pause();
-        tickSound.currentTime = 0;
-        tickSound.play().catch(() => {});
+        try {
+          tickSound.pause();
+          tickSound.currentTime = 0;
+          tickSound.play();
+        } catch (_) {}
       }
 
       if (timeLeft <= 0) {
         clearInterval(timerInterval);
-        stopAllSounds();
 
+        // Stop ticking and any celebration sound
+        [tickSound, hurraySound].forEach(sound => {
+          if (sound) {
+            sound.pause();
+            sound.currentTime = 0;
+          }
+        });
+
+       
         if (buzzer) {
-          buzzer.pause();
-          buzzer.currentTime = 0;
-          buzzer.play().catch(() => {});
+          try {
+            buzzer.pause();
+            buzzer.currentTime = 0;
+            buzzer.loop = false; 
+            buzzer.play();
+          } catch (_) {}
         }
 
-        handleWrong();
+        setTimeout(() => {
+          if (buzzer) {
+            buzzer.pause();
+            buzzer.currentTime = 0;
+          }
+          handleWrong({ fromTimeout: true });
+        }, 800);
       }
     }, 1000);
   }
 
-  
-  document.getElementById("btnCorrect").addEventListener("click", handleCorrect);
-  document.getElementById("btnWrong").addEventListener("click", handleWrong);
+  // ===============================
+  // SCORING
+  // ===============================
+  document.getElementById("btnCorrect").addEventListener("click", () => handleCorrect());
+  document.getElementById("btnWrong").addEventListener("click", () => handleWrong());
 
   function handleCorrect() {
     clearInterval(timerInterval);
     stopAllSounds();
 
     if (hurraySound) {
-      hurraySound.pause();
-      hurraySound.currentTime = 0;
-      hurraySound.play().catch(() => {});
+      try {
+        hurraySound.pause();
+        hurraySound.currentTime = 0;
+        hurraySound.play();
+      } catch (_) {}
     }
 
     updateScore(selectedHouse, 20);
 
     answerText.style.color = "green";
-    answerText.textContent = "Answer: " + activeQuestions[0].a;
-    answerText.style.fontSize = "30px";
+    answerText.textContent = "Answer: " + activeQuestions[currentIndex].a;
+    answerText.style.fontSize = "50px";
     answerText.style.fontWeight = "bold";
-
-    setScoringButtonsEnabled(false);
-    setTimeout(resetQuestionUI, 60000);
   }
 
-  function handleWrong() {
+  // Accept an optional flag to avoid stopping sounds when called after buzzer timeout
+  function handleWrong(opts = {}) {
     clearInterval(timerInterval);
-    stopAllSounds();
+
+    
+    if (!opts.fromTimeout) {
+      stopAllSounds();
+    }
 
     updateScore(selectedHouse, -10);
 
     answerText.style.color = "red";
-    answerText.textContent = "Answer: " + activeQuestions[0].a;
-    answerText.style.fontSize = "30px";
+    answerText.textContent = "Answer: " + activeQuestions[currentIndex].a;
+    answerText.style.fontSize = "50px";
     answerText.style.fontWeight = "bold";
-
-    setScoringButtonsEnabled(false);
-    setTimeout(resetQuestionUI, 60000);
   }
 
- 
+  // ===============================
+  // RESET
+  // ===============================
   function resetQuestionUI() {
     clearInterval(timerInterval);
     stopAllSounds();
@@ -192,8 +228,11 @@ document.addEventListener("DOMContentLoaded", () => {
   function stopAllSounds() {
     [tickSound, buzzer, hurraySound].forEach(sound => {
       if (sound) {
-        sound.pause();
-        sound.currentTime = 0;
+        try {
+          sound.pause();
+          sound.currentTime = 0;
+          sound.loop = false;
+        } catch (_) {}
       }
     });
   }

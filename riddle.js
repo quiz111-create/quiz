@@ -75,7 +75,7 @@ function showQuestion2() {
     btn.style.display = "inline-block";
   });
 }
-questionBox.style.fontSize = "40px";
+questionBox.style.fontSize = "55px";
 document.getElementById("showQn").addEventListener("click", showQuestion2);
 
 // ===============================
@@ -174,10 +174,8 @@ function showAnswerButtons() {
   btnCorrect.textContent = "Correct";
   btnWrong.textContent = "Wrong";
 
-  btnCorrect.style.height = btnWrong.style.height = "50px";
-  btnCorrect.style.width = btnWrong.style.width = "150px";
 
-  btnCorrect.className = btnWrong.className = "quiz-btn";
+  btnCorrect.className = btnWrong.className = "btns";
 
   btnCorrect.onclick = () => {
     clearInterval(timerInterval);
@@ -243,7 +241,7 @@ function showCorrectAnswer() {
   answerText.id = "correctAnswerText";
   answerText.style.color = "green";
   answerText.style.fontWeight = "bold";
-  answerText.style.fontSize = "30px";
+  answerText.style.fontSize = "40px";
   answerText.textContent = "Answer: " + questions[currentQuestionIndex].a;
 
   questionBox.appendChild(answerText);

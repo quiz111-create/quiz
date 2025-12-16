@@ -73,7 +73,7 @@ function showQuestion2() {
     b.style.display = "inline-block";
   });
 }
-
+questionBox.style.fontSize = "55px";
 document.getElementById("showQn").addEventListener("click", showQuestion2);
 
 // ===============================
@@ -84,7 +84,6 @@ questions.forEach((q, i) => {
   btn.textContent = i + 1;
   btn.className = "quiz-btn";
   btn.style.display = "none";
-  btn.style.width = "50px";
 
   btn.onclick = function () {
     currentQuestionIndex = i;
@@ -110,8 +109,8 @@ document.querySelectorAll("#houseSelect button").forEach(btn => {
     houseSelect.style.display = "none";
 
     questionBox.style.display = "block";
-    questionBox.innerHTML = `<h2>${questions[currentQuestionIndex].q}</h2>`;
-
+    questionBox.innerHTML = `<div>${questions[currentQuestionIndex].q}</div>`;
+  
     showAnswerButtons();
 
     // ⏱ timer duration based on pass
@@ -125,6 +124,9 @@ document.querySelectorAll("#houseSelect button").forEach(btn => {
 
 // ===============================
 // TIMER (FIXED)
+// ===============================
+// ===============================
+// TIMER (buzzer only when timer ends)
 // ===============================
 function startTimer() {
   clearInterval(timerInterval);
@@ -153,34 +155,41 @@ function startTimer() {
         tickSound.currentTime = 0;
       }
 
-      if (buzzer) {
-        buzzer.currentTime = 0;
-        buzzer.play();
-      }
+      // 🔔 buzzer plays immediately when time finishe
 
       handleTimeout();
     }
   }, 1000);
 }
-
-// ===============================
-// TIMEOUT LOGIC
-// ===============================
 function handleTimeout() {
   disableButtons();
 
-  if (passIndex >= 2) {
+  if (passIndex >= 3) {
+    // 🔔 buzzer before alert
+    if (buzzer) {
+      buzzer.currentTime = 0;
+      buzzer.play();
+    }
+
     alert("⏰ All houses failed!");
     showCorrectAnswer();
     return;
   }
 
   passIndex++;
+
+  // 🔔 buzzer before alert
+  if (buzzer) {
+    buzzer.currentTime = 0;
+    buzzer.play();
+  }
   alert("⏰ Time up! Passing question.");
 
   houseSelect.style.display = "block";
   questionBox.style.display = "none";
 }
+
+
 
 // ===============================
 // ANSWER BUTTONS
@@ -192,8 +201,8 @@ function showAnswerButtons() {
   c.textContent = "Correct";
   w.textContent = "Wrong";
 
-  c.className = "quiz-btn";
-  w.className = "quiz-btn";
+  c.className = "btns";
+  w.className = "btns";
 
   c.onclick = correctPressed;
   w.onclick = wrongPressed;
@@ -239,7 +248,7 @@ function wrongPressed() {
 
   disableButtons();
 
-  if (passIndex >= 2) {
+  if (passIndex >= 3) {
     alert("❌ All houses failed!");
     showCorrectAnswer();
     return;
@@ -270,7 +279,7 @@ function showCorrectAnswer() {
   p.id = "correctAnswerText";
   p.style.color = "green";
   p.style.fontWeight = "bold";
-  p.style.fontSize = "25px";
+  p.style.fontSize = "40px";
   p.textContent = "Answer: " + questions[currentQuestionIndex].a;
 
   questionBox.appendChild(p);

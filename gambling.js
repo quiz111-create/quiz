@@ -108,7 +108,7 @@ document.querySelectorAll("#houseSelectG button").forEach(hBtn => {
     elG.houseSelect.style.display = "none";
 
     const q = QUESTIONS_G[currentCategoryG][currentQuestionIndexG];
-    elG.questionBox.innerHTML = `<div><h1>${q.q}</h1></div>`;
+    elG.questionBox.innerHTML = `<div><h3>${q.q}</h3></div>`;
     elG.questionBox.style.display = "block";
     startTimerG(q.a);
     showAnswerButtonsG(q.a);
@@ -124,7 +124,7 @@ function startTimerG(answer) {
   elG.timerBox.style.height = "50px";
   elG.timerBox.style.width = "150px";
   elG.timerBox.style.borderRadius = "20px";
-  elG.timerBox.style.fontSize = "28px";   
+  elG.timerBox.style.fontSize = "40px";   
   elG.timerBox.style.fontWeight = "bold"; 
   elG.timerBox.style.textAlign = "center"; 
 
@@ -151,8 +151,8 @@ function showAnswerButtonsG(answer) {
   
   correctBtn.textContent = "Correct";
   wrongBtn.textContent = "Wrong";
-  correctBtn.className = "quiz-action quiz-btn";
-  wrongBtn.className = "quiz-action quiz-btn";
+  correctBtn.className = "quiz-action btns";
+  wrongBtn.className = "quiz-action btns";
 
   correctBtn.onclick = () => {
     updateScoreG(selectedHouseG, scoreFor(currentCategoryG));
@@ -181,9 +181,10 @@ function disableAnswerButtonsG() {
 }
 
 function showAnswerTextG(answer) {
-  elG.display.style.fontSize = "30px";
+  elG.display.style.fontSize = "40px";
   elG.display.style.color = "green";
   elG.display.textContent = "Answer: " + answer;
+  document.getElementById("timerBox").style.display = "none";
 }
 
 function scoreFor(cat) {

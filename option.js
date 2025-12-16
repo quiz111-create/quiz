@@ -197,7 +197,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     answerText.textContent = "✅ Correct Answer: " + qData.options[qData.correct];
     answerText.style.color = "green";
-    answerText.style.fontSize = "30px";
+    answerText.style.fontSize = "50px";
     answerText.style.fontWeight = "bold";
   }
 

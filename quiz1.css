@@ -3,7 +3,7 @@
   top: -90px;
   background-color:white;
   width: 95.5%;
-  height: 40rem;
+  height: 41rem;
   border: 15px;
   border-radius: 30px;
   margin: 1.25px;
@@ -82,23 +82,25 @@
   text-decoration: none;
   color: black;
 }
-.question,.sight,.sound{
+.question,.sight,.sound {
   position: relative;
   display: none;
   margin-top:10px;
   margin-left:10px;
   cursor: pointer;
   border: #757eff 2px solid;
-  width: 85px;
-  height:70px;
+  padding: 10px 20px;
+  height: 60px;
+  width: 80px;
   font-size: 35px;
   background-color: #757eff;
-  border-radius: 35px;
+  border-radius: 40px;
   color: whitesmoke;
   border: none;
   padding: 10px;
+   font-weight: bold;
   cursor: pointer;
-  margin: 10px;
+  margin-bottom: 20px;
 }
 .gold,.diamond,.platinum{
   margin-top: -50px;
@@ -155,21 +157,41 @@
   border-radius:10px;
   cursor: pointer;
 }
-.extra{
+.extra,#btnCorrect,#btnWrong,.btns{
   border: #757eff 2px solid;
   background-color: #757eff;
   color: white;
   width:200px;
   height: 80px;
   padding: 10px;
+  margin-right: 10px;
   font-family: poppins;
-  font-size: 17px;
+  font-size: 30px;
+  font-weight:bold;
+  border-radius:20px;
+  cursor: pointer;
+}
+#subs{
+    border: #757eff 2px solid;
+  background-color: #757eff;
+  color: white;
+  width:400px;
+  height: 80px;
+  padding: 10px;
+  margin-right: 10px;
+  font-family: poppins;
+  font-size: 30px;
+  font-weight:bold;
   border-radius:20px;
   cursor: pointer;
 }
 #showSightSound{
   margin-top: 100px;
-  width:300px;
+    color: white;
+  width:450px;
+  height:90px;
+  font-size: 30px;
+  font-weight: bold;
 }
 #generalimg{
   position: relative;
@@ -329,22 +351,23 @@ width: 200px;
 height:80px;
 top: 40px;
 cursor: pointer;
+font-size: 30px;
 border-radius: 10px;
-font-style:bold;
+font-weight:bold;
 border: 2px solid #A8A8A8;
-border: 2px solid #ffffff55;
 box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
 transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 #sound{
 background: linear-gradient(135deg, #f2994a, #f2c94c);
-color: #2c2c2c;
-width: 120px;
-height:50px;
+color: white;
+width: 200px;
+height:80px;
 top: 40px;
 cursor: pointer;
 border-radius: 10px;
-font-style:bold;
+font-size: 30px;
+font-weight:bold;
 border: 2px solid #ffffff55;
 box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
 transition: transform 0.2s ease, box-shadow 0.2s ease;
@@ -468,11 +491,14 @@ position:calc();
     }
     .quiz-btn {
   background-color: #757eff;
-  border-radius: 50px;
+  height: 60px;
+  width: 80px;
+  border-radius: 40px;
   color: whitesmoke;
   border: none;
   padding: 10px 20px;
-  font-size: 18px;
+  font-size: 35px;
+  font-weight: bold;
   cursor: pointer;
   margin: 10px;
   text-indent: -2px;
@@ -488,6 +514,7 @@ position:calc();
   display: none; 
   width: 90%;
   max-width: 1400px;
+  font-size: 55px;
   margin: 20px auto;
   margin-left: 30px;
   background-color: #ffffff;
@@ -532,7 +559,7 @@ position:calc();
   height: 100%;
   max-height: 500px;
   width:100%;
-  max-width: 800px;
+  max-width: 90%;
   margin-top: 10px;
   margin-bottom: 5px;
   background-color: #ffffff;
@@ -702,8 +729,10 @@ h1, h2 {
   margin-left:10px;
   cursor: pointer;
   border: #757eff 2px solid;
-  width: 100px;
+  width: 200px;
+  height: 60px;
   font-size: 20px;
+  font-weight: bold;
 }
 #startBtn,#startBtn1,#startBtn2,#startBtn3,#startBtn4,#startBtn5{
   background-color: #757eff;
@@ -724,11 +753,11 @@ h1, h2 {
 #red{
   background-color: red;
   color:whitesmoke;
-  border-radius:20px;
-  width: 90px;
-  height:40px;
-  font-size: 19px;
-  font-style: bold;
+  border-radius:40px;
+  width: 150px;
+  height:60px;
+  font-size: 30px;
+  font-weight: bold;
   cursor:pointer;
   border:wheat;
   text-align: center;
@@ -737,11 +766,11 @@ h1, h2 {
 #blue{
   background-color: #357ab8;
   color:whitesmoke;
-  border-radius: 20px;
-  width: 90px;
-  height:40px;
-  font-size: 19px;
-  font-style: bold;
+  border-radius:40px;
+  width: 150px;
+  height:60px;
+  font-size: 30px;
+  font-weight: bold;
   cursor:pointer;
    border:wheat;
    padding:5px;
@@ -749,11 +778,11 @@ h1, h2 {
 #yellow{
    background-color: #FFD700;
   color:whitesmoke;
-  border-radius: 20px;
-  width: 90px;
-  height:40px;
-  font-size: 19px;
-  font-style: bold;
+  border-radius:40px;
+  width: 150px;
+  height:60px;
+  font-size: 30px;
+  font-weight: bold;
   cursor:pointer;
    border:wheat;
    text-align:center;
@@ -762,11 +791,11 @@ h1, h2 {
 #green{
    background-color: green;
   color:whitesmoke;
-  border-radius: 20px;
-  width: 90px;
-  height:40px;
-  font-size: 19px;
-  font-style: bold;
+  border-radius:40px;
+  width: 150px;
+  height:60px;
+  font-size: 30px;
+  font-weight: bold;
   cursor:pointer;
    border:wheat;
    text-align:center;
@@ -777,11 +806,11 @@ h1, h2 {
   border: #757eff 2px solid;
   background-color: #757eff;
   color: white;
-  width:200px;
-  height: 80px;
+  width:300px;
+  height: 150px;
   padding: 10px;
   font-family: poppins;
-  font-size: 25px;
+  font-size: 40px;
   border-radius:10px;
   cursor: pointer;
 }
@@ -819,12 +848,12 @@ h1, h2 {
   border: #757eff 2px solid;
   background-color: #757eff;
   color: white;
-  width:300px;
-  height: 70px;
+  width:450px;
+  height:90px;
   padding: 10px;
   font-family: poppins;
   font-weight: bold;
-  font-size: 17px;
+    font-size: 30px;
   border-radius:20px;
   cursor: pointer;
 }
@@ -833,13 +862,16 @@ h1, h2 {
   border-radius:10px;
   padding:5px;
   margin-left: 10px;;
+  height: 60px;
+  width: 80px;
+  border-radius: 40px;
   cursor: pointer;
-  width: 35px;
   font-size: 14px;
 }
 #questionButtonContainer {
   position: relative;
-  height: 130px;
+  top: -90px;
+  height: 200px;
   margin-top: 20px;
   overflow: hidden;
   display: flex;
@@ -850,20 +882,25 @@ h1, h2 {
 .categorySet {
   left: 0;
   width: 100%;
-  text-align: center;  transform: translateY(-10px);
+  text-align: center;  transform: translateY(-30px);
 
 }
 
 .categorySet button {
-
+  padding:5px;
+  margin-left: 10px;;
+  height: 60px;
+  width: 80px;
+  border-radius: 40px;
+  cursor: pointer;
+  font-size: 25px;
+  font-weight: bold;
   margin: 5px;
-  padding: 10px 15px;
-  font-size: 16px;
-  border-radius: 8px;
-    border: #757eff 2px solid;
-    background-color: #757eff;
-      color: white;
+  border: #757eff 2px solid;
+  background-color: #757eff;
+  color: white;
 }
+
 
 .question-img {
   width: 150px;
